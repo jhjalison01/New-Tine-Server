@@ -1,9 +1,8 @@
 package com.umc.NewTine.config.auth;
 
-import com.ewha.pudong.service.CustomOAuth2UserService;
 import com.umc.NewTine.config.JwtAuthenticationFilter;
 import com.umc.NewTine.config.JwtTokenProvider;
-import com.umc.NewTine.config.auth.OAuth2AuthenticationSuccessHandler;
+import com.umc.NewTine.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsUtils;
 
 @EnableWebSecurity
@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                                 .antMatchers("/").permitAll() //일단 다 허용
 //                        .mvcMatchers("**/oauth2/**", "/main", "/","/css/**","/images/**","/js/**").permitAll()
 //                        .anyRequest().authenticated()

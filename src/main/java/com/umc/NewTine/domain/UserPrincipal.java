@@ -1,6 +1,6 @@
 package com.umc.NewTine.domain;
 
-import io.micrometer.common.lang.Nullable;
+import com.sun.istack.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,7 +39,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority(user.getRole().getValue()));
-        return new UserPrincipal(user.getId(), user.getUser_id(), authorities);
+        return new UserPrincipal(user.getId(), user.getUserId(), authorities);
     }
 
     @Override
