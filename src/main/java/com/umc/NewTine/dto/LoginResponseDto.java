@@ -1,0 +1,24 @@
+package com.umc.NewTine.dto;
+
+
+import com.umc.NewTine.domain.User;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class LoginResponseDto {
+    private String userId;
+    private String email;
+    private String accessToken;
+    private String refreshToken;
+
+    @Builder
+    public LoginResponseDto(User user, String accessToken, String refreshToken){
+        this.userId = user.getUserId();
+        this.email = user.getEmail();
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+}
