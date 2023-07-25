@@ -34,7 +34,7 @@ public class UserController {
         return userService.joinUser(signupRequestDto);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
         User user = userService.findUserByEmail(loginRequestDto.getEmail().trim());
 
@@ -49,8 +49,6 @@ public class UserController {
         String access = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole());
         String refresh = jwtTokenProvider.createRefreshToken(user.getEmail(), user.getRole());
 
-        tokenService.updateRefreshToken(loginRequestDto.getEmail(), refresh); //리프레시 토큰 저장
-
         LoginResponseDto loginResponseDto = LoginResponseDto.builder()
                 .user(user)
                 .accessToken(access)
@@ -59,11 +57,11 @@ public class UserController {
         return loginResponseDto;
     }
 
-    @PostMapping("/refresh/token")
-    public RefreshTokenResponseDto refreshToken(@RequestHeader(value="KEY-EMAIL") String email,
-                                                @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
-        RefreshTokenResponseDto refreshTokenResponseDto = tokenService.refreshToken(email, refreshToken);
-        return refreshTokenResponseDto;
-    }
+//    @PostMapping("/refresh/token")
+//    public RefreshTokenResponseDto refreshToken(@RequestHeader(value="KEY-EMAIL") String email,
+//                                                @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
+//        RefreshTokenResponseDto refreshTokenResponseDto = tokenService.refreshToken(email, refreshToken);
+//        return refreshTokenResponseDto;
+//    }
 
 }
