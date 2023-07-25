@@ -17,16 +17,13 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="user")
 public class User extends BaseEntity{
-    @Id
+    @Id @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     @NotNull
-    private String username;
-
-    @Column
-    private String userId;
+    private String nickname;
 
     @Column
     private String email;
@@ -50,9 +47,8 @@ public class User extends BaseEntity{
     private String providerId;
 
     @Builder
-    public User(String username, String userId, String email, String image, Role role, String password, String provider, String providerId) {
-        this.username = username;
-        this.userId = userId;
+    public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
+        this.nickname = nickname;
         this.email = email;
         this.image = image;
         this.role = role;
@@ -63,8 +59,8 @@ public class User extends BaseEntity{
 
 
 
-    public User update(String username, String image){
-        this.username = username;
+    public User update(String nickname, String image){
+        this.nickname = nickname;
         this.image = image;
 
         return this;

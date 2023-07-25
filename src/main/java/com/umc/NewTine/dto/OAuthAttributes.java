@@ -53,8 +53,7 @@ public class OAuthAttributes {
 
     public User toEntity() {
         User user = User.builder()
-                .username(name)
-                .userId(name)
+                .nickname(name)
                 .image(image)
                 .email(email)
                 .role(Role.USER)

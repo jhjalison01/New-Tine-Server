@@ -29,37 +29,38 @@ public class UserService{
     @Transactional
     public ResponseEntity<Object> joinUser(SignupRequestDto signupRequestDto){
 
-//        if (signupRequestDto.getUserId().isEmpty()||signupRequestDto.getEmail().isEmpty()||signupRequestDto.getPassword().isEmpty()) //||signupRequestDto.getPhone().isEmpty()
-//            throw new CustomException(ErrorCode.CANNOT_EMPTY_CONTENT);
+        if (signupRequestDto.getEmail().isEmpty()||signupRequestDto.getPassword().isEmpty()) //||signupRequestDto.getPhone().isEmpty()
+            throw new IllegalArgumentException("빈칸은 허용하지 않습니다");
 
         User user = signupRequestDto.toEntity(signupRequestDto);
 
         userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user.getUserId()+"님이 성공적으로 가입되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(user.getEmail()+"님이 성공적으로 가입되었습니다.");
     }
 
 
     public void deleteUserById(Long id) {
-//        userRepository.findById(id)
-//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User를 찾을 수 없습니다."));
         userRepository.deleteById(id);
     }
 
 
 //    public UserResponseDto findUserById(Long id) {
 //        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+//                .orElseThrow(() -> new IllegalArgumentException("User를 찾을 수 없습니다."));
 //
 //        return new UserResponseDto(user);
 //    }
 
 
-//    public User findUserByEmail(String email) {
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-//
-//        return user;
-//    }
+    public User findUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+                            return new IllegalArgumentException("User를 찾을 수 없습니다.");
+        });
+
+        return user;
+    }
 
 
 //    public List<UserResponseDto> findUserList() {

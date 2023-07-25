@@ -1,7 +1,11 @@
 package com.umc.NewTine.controller;
 
 import com.umc.NewTine.config.JwtTokenProvider;
+import com.umc.NewTine.domain.User;
+import com.umc.NewTine.dto.LoginRequestDto;
+import com.umc.NewTine.dto.LoginResponseDto;
 import com.umc.NewTine.dto.SignupRequestDto;
+import com.umc.NewTine.repository.UserRepository;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,8 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
+    private final UserRepository userRepository;
+
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignupRequestDto signupRequestDto){
 //        if (userService.checkDuplicateUsers(signupRequestDto))
@@ -33,11 +39,11 @@ public class UserController {
         User user = userService.findUserByEmail(loginRequestDto.getEmail().trim());
 
         if (!userRepository.existsByEmail(loginRequestDto.getEmail().trim())) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new IllegalArgumentException("User를 찾을 수 없습니다.");
         }
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
-            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
+            throw new IllegalArgumentException("비밀번호를 찾을 수 없습니다.");
         }
 
         String access = jwtTokenProvider.createAccessToken(user.getEmail(), user.getRole());

@@ -10,29 +10,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @NoArgsConstructor
 public class SignupRequestDto {
-    private String userId;
     private String email;
     private String password;
 
 
     @Builder
-    public SignupRequestDto(String username, String userId, String email, String password, String phone) {
-        this.userId = userId;
-        this.email = email;
-        this.password = password;
+    public SignupRequestDto(User user) {
+        this.email = user.getEmail();
+        this.password = user.getPassword();
     }
 
     public void encryptPassword(PasswordEncoder passwordEncoder) {
 
-//        if(password.isEmpty())
-//            throw new CustomException(ErrorCode.CANNOT_EMPTY_CONTENT);
-//        else
-        this.password = passwordEncoder.encode(password);
+        if(password.isEmpty())
+            throw new IllegalArgumentException("비밀번호를 입력해주세요");
+        else
+            this.password = passwordEncoder.encode(password);
     }
 
     public User toEntity(SignupRequestDto signupRequestDto) {
         return User.builder()
-                .userId(signupRequestDto.getUserId())
                 .email(signupRequestDto.getEmail())
                 .password(signupRequestDto.getPassword())
                 .build();

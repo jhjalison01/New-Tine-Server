@@ -84,6 +84,31 @@ public class JwtTokenProvider {
                 .build();
     }
 
+    // Access JWT 토큰 생성
+    public String createAccessToken(String userPk, Role role) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userPk));
+        claims.put("roles", role);
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME))
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+    }
+
+    // Refresh JWT 토큰 생성
+    public String createRefreshToken(String userPk, Role role) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userPk));
+        claims.put("roles", role);
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME))
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+    }
     public Authentication getAuthentication(String accessToken) {
         //토큰 복호화
         Claims claims = parseClaims(accessToken);
