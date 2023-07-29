@@ -16,7 +16,7 @@ public class LoginResponseDto {
 
     @Builder
     public LoginResponseDto(User user, String accessToken, String refreshToken){
-        this.userId=getUserId();
+        this.userId=user.getId();
         this.email = user.getEmail();
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
