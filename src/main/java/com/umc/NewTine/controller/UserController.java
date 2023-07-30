@@ -2,9 +2,9 @@ package com.umc.NewTine.controller;
 
 import com.umc.NewTine.config.JwtTokenProvider;
 import com.umc.NewTine.domain.User;
-import com.umc.NewTine.dto.LoginRequestDto;
-import com.umc.NewTine.dto.LoginResponseDto;
-import com.umc.NewTine.dto.SignupRequestDto;
+import com.umc.NewTine.dto.request.LoginRequestDto;
+import com.umc.NewTine.dto.response.LoginResponseDto;
+import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.repository.UserRepository;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignupRequestDto signupRequestDto){
-//        if (userService.checkDuplicateUsers(signupRequestDto))
-//            throw new CustomException(ErrorCode.CANNOT_DUPLICATE_EMAIL);
+        if (userService.checkDuplicateUsers(signupRequestDto))
+            throw new IllegalArgumentException("이미 사용된 메일입니다");
         signupRequestDto.encryptPassword(passwordEncoder);
         return userService.joinUser(signupRequestDto);
     }

@@ -2,7 +2,7 @@ package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.domain.UserPrincipal;
-import com.umc.NewTine.dto.OAuthAttributes;
+import com.umc.NewTine.dto.request.OAuthAttributes;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

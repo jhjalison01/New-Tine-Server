@@ -1,4 +1,4 @@
-package com.umc.NewTine.dto;
+package com.umc.NewTine.dto.response;
 
 
 import com.umc.NewTine.domain.User;

@@ -1,7 +1,7 @@
 package com.umc.NewTine.config.auth;
 
 import com.umc.NewTine.config.JwtTokenProvider;
-import com.umc.NewTine.dto.UserResponseDto;
+import com.umc.NewTine.dto.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

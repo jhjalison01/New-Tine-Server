@@ -1,7 +1,7 @@
 package com.umc.NewTine.config;
 
 import com.umc.NewTine.domain.UserPrincipal;
-import com.umc.NewTine.dto.UserResponseDto;
+import com.umc.NewTine.dto.response.UserResponseDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
