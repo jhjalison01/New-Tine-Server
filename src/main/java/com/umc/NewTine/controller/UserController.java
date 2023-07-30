@@ -6,14 +6,12 @@ import com.umc.NewTine.dto.request.LoginRequestDto;
 import com.umc.NewTine.dto.response.LoginResponseDto;
 import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.repository.UserRepository;
+import com.umc.NewTine.service.MailService;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +23,8 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
+
+    private final MailService mailService;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignupRequestDto signupRequestDto){
@@ -63,5 +63,13 @@ public class UserController {
 //        RefreshTokenResponseDto refreshTokenResponseDto = tokenService.refreshToken(email, refreshToken);
 //        return refreshTokenResponseDto;
 //    }
+    @PostMapping("login/mailConfirm")
+    @ResponseBody
+    String mailConfirm(@RequestParam("email") String email) throws Exception {
+
+        String code = mailService.sendSimpleMessage(email);
+        System.out.println("인증코드 : " + code);
+        return code;
+    }
 
 }
