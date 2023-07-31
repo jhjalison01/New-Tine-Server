@@ -4,6 +4,7 @@ import com.umc.NewTine.domain.News;
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewsDto;
 import com.umc.NewTine.repository.NewsRepository;
+import com.umc.NewTine.repository.PressRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class NewsService {
 
     private final NewsRepository newsRepository;
+    private final PressRepository pressRepository;
 
     @Transactional(readOnly = true)
     public List<NewsDto> getHomeNews() throws BaseException {
@@ -28,7 +30,7 @@ public class NewsService {
             throw new BaseException(NO_NEWS_YET);
         } else {
             return allNews.stream()
-                    .map(NewsDto::from)
+                    .map(news -> NewsDto.from(news, news.getPress()))
                     .collect(Collectors.toList());
         }
     }

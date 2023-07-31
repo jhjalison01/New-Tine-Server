@@ -15,20 +15,18 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class NewsDto {
 
-    private Long news_id;
     private String title;
     private String image;
     private String summary;
-    private Press press;
+    private String press_name;
     private Timestamp createdDate;
 
-    public static NewsDto from(News news) {
+    public static NewsDto from(News news, Press press) {
         return NewsDto.builder()
-                .news_id(news.getId())
                 .title(news.getTitle())
                 .image(news.getImage())
                 .summary(news.getSummary())
-                .press(news.getPress())
+                .press_name(press.getName())
                 .createdDate(news.getCreatedAt())
                 .build();
     }
