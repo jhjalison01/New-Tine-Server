@@ -9,9 +9,6 @@ import java.util.Optional;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
 
-//    @Query(value = "select * from news LIMIT 5", nativeQuery = true)
-//    Optional<List<News>> findNews();
-
     @Query(value = "select * from News LIMIT 5", nativeQuery = true)
     Optional<List<News>> findNews();
 
