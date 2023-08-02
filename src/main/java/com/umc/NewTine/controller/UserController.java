@@ -67,6 +67,7 @@ public class UserController {
     @ResponseBody
     String mailConfirm(@RequestParam("email") String email) throws Exception {
 
+        System.out.println("email = " + email);
         String code = mailService.sendSimpleMessage(email);
         System.out.println("인증코드 : " + code);
         return code;

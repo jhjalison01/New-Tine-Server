@@ -23,8 +23,8 @@ public class MailService implements MailServiceInterface {
     // 메일 내용 작성
     @Override
     public MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
-//		System.out.println("보내는 대상 : " + to);
-//		System.out.println("인증 번호 : " + ePw);
+		System.out.println("보내는 대상 : " + to);
+		System.out.println("인증 번호 : " + ePw);
 
         MimeMessage message = emailsender.createMimeMessage();
 
@@ -34,11 +34,11 @@ public class MailService implements MailServiceInterface {
         String msgg = "";
         msgg += "<div style='margin:100px;'>";
         msgg += "<h1> 안녕하세요</h1>";
-        msgg += "<h1> 통합 취업 정보 포탈 GoodJob 입니다</h1>";
+        msgg += "<h1> New Tine입니다</h1>";
         msgg += "<br>";
         msgg += "<p>아래 코드를 회원가입 창으로 돌아가 입력해주세요<p>";
         msgg += "<br>";
-        msgg += "<p>항상 당신의 꿈을 응원합니다. 감사합니다!<p>";
+        msgg += "<p>감사합니다!<p>";
         msgg += "<br>";
         msgg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
         msgg += "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
@@ -48,7 +48,7 @@ public class MailService implements MailServiceInterface {
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");// 내용, charset 타입, subtype
         // 보내는 사람의 이메일 주소, 보내는 사람 이름
-        message.setFrom(new InternetAddress("goodjobproject@naver.com", "GoodJob_Admin"));// 보내는 사람
+        message.setFrom(new InternetAddress("chaeri93@naver.com", "NewTine_Admin"));// 보내는 사람
 
         return message;
     }
