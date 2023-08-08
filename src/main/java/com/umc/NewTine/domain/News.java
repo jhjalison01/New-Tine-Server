@@ -23,7 +23,7 @@ public class News {
     private LocalDateTime createdAt;
     private int views;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="pressId")
     private Press press;
 
