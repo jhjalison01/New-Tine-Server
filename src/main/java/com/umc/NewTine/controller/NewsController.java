@@ -19,13 +19,6 @@ public class NewsController {
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
-/*
-    @GetMapping("/{newsId}")
-    public SingleNewsResponseDto getSingleNews(@PathVariable("newsId") Long newsId) {
-        return newsService.getSingleNewsById(newsId);
-    }
-
- */
 
     @GetMapping("/{newsId}")
     public ResponseEntity<BaseResponse<Object>> getSingleNews(@PathVariable("newsId") Long newsId) {
