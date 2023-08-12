@@ -20,7 +20,7 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @GetMapping("/news/{userId}/recent")
+    @GetMapping("/news/{userId}/recent") //최근 본 뉴스 조회
     public BaseResponse<List<NewsRecentResponse>> getRecentNews(@PathVariable Long userId) {
 
         try {
@@ -30,7 +30,7 @@ public class NewsController {
         }
     }
 
-    @GetMapping("/news/ranking")
+    @GetMapping("/news/ranking")// 인기 뉴스 조회
     public BaseResponse<List<NewsRankingResponse>> getRankingNews() {
 
         try {
@@ -40,7 +40,16 @@ public class NewsController {
         }
     }
 
-    @PostMapping("/news")
+    @GetMapping("/search") // 검색어를 포함하는 뉴스 기사 조회
+    public BaseResponse<List<NewsSearchByWordResponse>> searchNewsByWord() {
+        try {
+            return new BaseResponse<>(newsService.searchNewsByWord());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @PostMapping("/news") //사용자-뉴스 기록 저장, viewCount 증가
     public BaseResponse<Void> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
         try {
             if (newsService.saveRecentViewTime(request)) {
