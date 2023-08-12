@@ -65,4 +65,13 @@ public class User extends BaseEntity{
 
         return this;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
 }
