@@ -2,11 +2,10 @@ package com.umc.NewTine.controller;
 
 
 
+import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.NewsRecentResponse;
 import com.umc.NewTine.service.NewsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,9 +18,14 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @GetMapping("news/recent")
+    @GetMapping("/news/recent")
     public List<NewsRecentResponse> getRecentNews(@RequestParam Long userId) {
         return newsService.getRecentNews(userId);
+    }
+
+    @PostMapping("/news")
+    public void saveRecentViewTime(@RequestBody NewsRecentRequest request) {
+        newsService.saveRecentViewTime(request);
     }
 
 }
