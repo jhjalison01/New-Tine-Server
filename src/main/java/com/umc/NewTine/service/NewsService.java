@@ -4,6 +4,7 @@ import com.umc.NewTine.domain.News;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.domain.UserNewsHistory;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
+import com.umc.NewTine.dto.response.NewsRankingResponse;
 import com.umc.NewTine.dto.response.NewsRecentResponse;
 import com.umc.NewTine.repository.NewsRepository;
 import com.umc.NewTine.repository.UserNewsHistoryRepository;
@@ -42,6 +43,15 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<NewsRankingResponse> getRankingNews() {
+        List<News> newsList = newsRepository.findAllByOrderByViewDesc()
+                .orElse(List.of());
+        return newsList.stream()
+                .map(NewsRankingResponse::new)
+                .limit(3)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public void saveRecentViewTime(NewsRecentRequest request) {
