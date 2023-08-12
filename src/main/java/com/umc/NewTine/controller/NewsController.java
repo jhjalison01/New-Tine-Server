@@ -1,8 +1,8 @@
 package com.umc.NewTine.controller;
 
 
-import com.umc.NewTine.domain.news.News;
-import com.umc.NewTine.dto.news.response.NewsRecentResponse;
+
+import com.umc.NewTine.dto.response.NewsRecentResponse;
 import com.umc.NewTine.service.NewsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
