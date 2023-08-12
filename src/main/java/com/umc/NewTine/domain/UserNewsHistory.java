@@ -15,9 +15,11 @@ public class UserNewsHistory {
     private Long id = null;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "news_id")
     private News news;
 
     @Column

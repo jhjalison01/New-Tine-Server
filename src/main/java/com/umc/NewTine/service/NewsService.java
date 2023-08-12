@@ -7,6 +7,7 @@ import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewsRankingResponse;
 import com.umc.NewTine.dto.response.NewsRecentResponse;
+import com.umc.NewTine.dto.response.NewsSearchByWordResponse;
 import com.umc.NewTine.repository.NewsRepository;
 import com.umc.NewTine.repository.UserNewsHistoryRepository;
 import com.umc.NewTine.repository.UserRepository;
@@ -59,8 +60,12 @@ public class NewsService {
 
     @Transactional //검색어를 포함하는 뉴스 기사 조회
     public List<NewsSearchByWordResponse> searchNewsByWord(String word) throws BaseException {
-        List<News> newsList = newsRepository.findByTitleContaining(word)
+        List<News> newsList = newsRepository.findNewsByTitleContaining(word)
                 .orElse(List.of());
+        return newsList.stream()
+                .map(NewsSearchByWordResponse::new)
+                .limit(5)
+                .collect(Collectors.toList());
     }
 
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가

@@ -1,10 +1,7 @@
 package com.umc.NewTine.controller;
 
 import com.umc.NewTine.dto.request.NewsRecentRequest;
-import com.umc.NewTine.dto.response.BaseException;
-import com.umc.NewTine.dto.response.BaseResponse;
-import com.umc.NewTine.dto.response.NewsRankingResponse;
-import com.umc.NewTine.dto.response.NewsRecentResponse;
+import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.service.NewsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
