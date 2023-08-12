@@ -1,7 +1,5 @@
 package com.umc.NewTine.controller;
 
-
-
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.NewsRecentResponse;
 import com.umc.NewTine.service.NewsService;

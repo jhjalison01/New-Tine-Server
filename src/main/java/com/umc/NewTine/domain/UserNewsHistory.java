@@ -1,13 +1,12 @@
 package com.umc.NewTine.domain;
 
 import com.sun.istack.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
+@NoArgsConstructor
 @Entity
 public class UserNewsHistory {
 

@@ -1,6 +1,5 @@
 package com.umc.NewTine.service;
 
-
 import com.umc.NewTine.domain.News;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.domain.UserNewsHistory;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +40,6 @@ public class NewsService {
                 .map(NewsRecentResponse::new)
                 .limit(5)
                 .collect(Collectors.toList());
-
     }
 
 
