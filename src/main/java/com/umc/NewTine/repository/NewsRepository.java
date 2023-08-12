@@ -1,6 +1,5 @@
 package com.umc.NewTine.repository;
 
-
 import com.umc.NewTine.domain.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 

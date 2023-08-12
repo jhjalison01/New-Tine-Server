@@ -14,11 +14,9 @@ public class UserNewsHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = null;
 
-    @NotNull
     @ManyToOne
     private User user;
 
-    @NotNull
     @ManyToOne
     private News news;
 

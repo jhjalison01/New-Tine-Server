@@ -51,6 +51,11 @@ public class NewsService {
         News news = newsRepository.findById(request.getNewsId())
                 .orElseThrow((IllegalArgumentException::new));
         LocalDateTime recentViewTime = LocalDateTime.now();
+        boolean isDuplicate = userNewsHistoryRepository.existsByUserAndNewsAndRecentViewTimeBetween(user, news, recentViewTime.minusMinutes(1), recentViewTime);
+
+        if (!isDuplicate) {
+            news.setViews(news.getViews() + 1);
+        }
 
         UserNewsHistory userNewsHistory = userNewsHistoryRepository.findByUserAndNews(user, news)
                 .orElseGet(() -> new UserNewsHistory(user, news, recentViewTime));
