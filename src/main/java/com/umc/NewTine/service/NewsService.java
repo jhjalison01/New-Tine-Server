@@ -34,7 +34,7 @@ public class NewsService {
         this.userNewsHistoryRepository = userNewsHistoryRepository;
     }
 
-    @Transactional
+    @Transactional //최근 본 뉴스 조회
     public List<NewsRecentResponse> getRecentNews(Long userId) throws BaseException {
 
         User user = userRepository.findById(userId)
@@ -47,7 +47,7 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional// 인기 뉴스 조회
     public List<NewsRankingResponse> getRankingNews() throws BaseException{
         List<News> newsList = newsRepository.findAllByOrderByViewsDesc()
                 .orElse(List.of());
@@ -57,7 +57,13 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional //검색어를 포함하는 뉴스 기사 조회
+    public List<NewsSearchByWordResponse> searchNewsByWord(String word) throws BaseException {
+        List<News> newsList = newsRepository.findByTitleContaining(word)
+                .orElse(List.of());
+    }
+
+    @Transactional //사용자-뉴스 기록 저장, viewCount 증가
     public boolean saveRecentViewTime(NewsRecentRequest request) throws BaseException{
 
         User user = userRepository.findById(request.getUserId())

@@ -40,10 +40,10 @@ public class NewsController {
         }
     }
 
-    @GetMapping("/search") // 검색어를 포함하는 뉴스 기사 조회
-    public BaseResponse<List<NewsSearchByWordResponse>> searchNewsByWord() {
+    @GetMapping("/search") //검색어를 포함하는 뉴스 기사 조회
+    public BaseResponse<List<NewsSearchByWordResponse>> searchNewsByWord(@RequestParam String word) {
         try {
-            return new BaseResponse<>(newsService.searchNewsByWord());
+            return new BaseResponse<>(newsService.searchNewsByWord(word));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
