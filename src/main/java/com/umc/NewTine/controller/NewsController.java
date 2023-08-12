@@ -21,6 +21,12 @@ public class NewsController {
         return newsService.getRecentNews(userId);
     }
 
+    @GetMapping("/news/ranking")
+    public List<NewsRankingResponse> getRankingNews(@PathVariable Long userId) {
+        return newsService.getRankingNews(userId);
+    }
+
+
     @PostMapping("/news")
     public void saveRecentViewTime(@RequestBody NewsRecentRequest request) {
         newsService.saveRecentViewTime(request);
