@@ -12,12 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import javax.persistence.EntityNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Service
 public class NewsService {
@@ -28,6 +27,7 @@ public class NewsService {
     private final NewsAndCategoryRepository newsAndCategoryRepository;
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
+
 
     @Autowired
     public NewsService(NewsRepository newsRepository,PressSubscriptionRepository pressSubscriptionRepository,
@@ -44,6 +44,10 @@ public class NewsService {
     }
     
 
+@Service
+public class NewsService {
+  
+    public SingleNewsResponseDto getSingleNewsById(Long newsId){
     @Transactional
     public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
         News news = newsRepository.findById(newsId)
@@ -70,13 +74,55 @@ public class NewsService {
                 .category(category)
                 .build();
     }
+  
+    //스크랩한 기사 가져오기
+    @Transactional
+    public List<ScrapNewsResponseDto> getScrappedNews(Long userId) throws BaseException {
 
-}
+        List<NewsScrap> newsScrapList=newsScrapRepository.findAllByUserId(userId);
 
+        return newsScrapList.stream()
+                .map(this::mapNewsScrapToResponseDto)
+                .collect(Collectors.toList());
+    }
+    //뉴스 제목, 생성 날짜, 언론사 이름 매핑
+    private ScrapNewsResponseDto mapNewsScrapToResponseDto(NewsScrap newsScrap) {
+        News news = newsScrap.getNews();
+        Press press = news.getPress();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        String formattedDate = formatter.format(news.getCreatedAt());
 
-@Service
-public class NewsService {
+        return new ScrapNewsResponseDto(news.getTitle(), formattedDate, press.getName());
+    }
+
+    //newsScrap 저장
+    @Transactional
+    public boolean saveNewsScrap(Long userId,Long newsId) throws BaseException{
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
+
+        NewsScrap newsScrap = new NewsScrap();
+        newsScrap.setUser(user);
+        newsScrap.setNews(news);
+
+        newsScrapRepository.save(newsScrap);
+
+        return true;
+    }
+
+    //newsScrap 삭제
+    @Transactional
+    public boolean deleteNewsScrap(Long userId, Long newsId) throws BaseException{
+        NewsScrap newsScrap = newsScrapRepository.findByUserIdAndNewsId(userId, newsId)
+                .orElseThrow(() -> new EntityNotFoundException("NewsScrap not found"));
+
+        newsScrapRepository.delete(newsScrap);
+        return true;
+    }
    
 
     @Transactional //최근 본 뉴스 조회

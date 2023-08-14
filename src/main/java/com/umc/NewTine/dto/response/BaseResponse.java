@@ -33,7 +33,6 @@ public class BaseResponse<T> {
         this.result = result;
     }
 
-
     public BaseResponse(boolean isSuccess, int code, String message) {
         this.isSuccess = isSuccess;
         this.code = code;
