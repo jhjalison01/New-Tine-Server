@@ -3,7 +3,17 @@ package com.umc.NewTine.repository;
 import com.umc.NewTine.domain.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NewsRepository extends JpaRepository<News,Long> {
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+import java.util.Optional;
+
+public interface NewsRepository extends JpaRepository<News, Long> {
+    Optional<News> findById(Long id);
+    Optional<List<News>> findAllByOrderByViewsDesc();
+
+    @Query("SELECT n FROM News n WHERE n.title LIKE %:word%")
+    Optional<List<News>> findNewsByTitleContaining(@Param("word") String word);
 
 }
