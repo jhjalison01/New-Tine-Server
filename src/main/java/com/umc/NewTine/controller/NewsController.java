@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/news")
 public class NewsController {
 
     private final NewsService newsService;
@@ -19,7 +18,7 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @GetMapping("/{newsId}")
+    @GetMapping("news/{newsId}")
     public BaseResponse<SingleNewsResponseDto>  getSingleNews(@PathVariable("newsId") Long newsId){
         //userId 수정하기
         Long userId=1L;
@@ -29,21 +28,4 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-    /*
-    public ResponseEntity<BaseResponse<Object>> getSingleNews(@PathVariable("newsId") Long newsId) {
-        try{
-            SingleNewsResponseDto result=newsService.getSingleNewsById(newsId);
-            BaseResponse<Object> successResponse = new BaseResponse<>(result);
-            return ResponseEntity.ok(successResponse);
-        }
-        catch(Exception e){
-            BaseResponse<Object> errorResponse = new BaseResponse<>(BaseResponseStatus.NO_NEWS_YET);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
-    }
-
-     */
-
-
-
 }
