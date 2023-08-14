@@ -51,6 +51,7 @@ public class User extends BaseEntity{
     private List<UserNewsHistory> userNewsHistories;
 
 
+
     @Builder
     public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
         this.nickname = nickname;

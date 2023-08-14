@@ -21,9 +21,9 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @NotNull
-    @Column
-    private long categoryId;
+//    @NotNull
+//    @Column
+//    private long categoryId;
 
     @NotNull
     @Column
@@ -40,7 +40,6 @@ public class News {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.categoryId = categoryId;
         this.pressId = pressId;
         this.views = 0;
     }

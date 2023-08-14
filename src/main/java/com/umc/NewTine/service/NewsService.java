@@ -6,6 +6,7 @@ import com.umc.NewTine.domain.User;
 import com.umc.NewTine.domain.UserNewsHistory;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.*;
+import com.umc.NewTine.repository.NewsAndCategoryRepository;
 import com.umc.NewTine.repository.NewsRepository;
 import com.umc.NewTine.repository.UserNewsHistoryRepository;
 import com.umc.NewTine.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,13 +26,16 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
+    private final NewsAndCategoryRepository newsAndCategoryRepository;
 
     public NewsService(NewsRepository newsRepository,
                        UserRepository userRepository,
-                       UserNewsHistoryRepository userNewsHistoryRepository) {
+                       UserNewsHistoryRepository userNewsHistoryRepository,
+                       NewsAndCategoryRepository newsAndCategoryRepository) {
         this.newsRepository = newsRepository;
         this.userRepository = userRepository;
         this.userNewsHistoryRepository = userNewsHistoryRepository;
+        this.newsAndCategoryRepository = newsAndCategoryRepository;
     }
 
     @Transactional //최근 본 뉴스 조회
@@ -70,11 +75,12 @@ public class NewsService {
     public List<NewsRecommendResponse> getRecommendNews(Long userId) throws BaseException {
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new BaseException(NO_USER_ID));
-        List<News> newsList = NewsAndCategoryRepository.findNewsByUserInterest(user)
+        List<News> newsList = newsAndCategoryRepository.findNewsByUserInterest(userId)
                 .orElse(List.of());
+        Collections.shuffle(newsList); //랜덤하게 4개 추천
         return newsList.stream()
                 .map(NewsRecommendResponse::new)
-                .limit(5)
+                .limit(4)
                 .collect(Collectors.toList());
     }
 

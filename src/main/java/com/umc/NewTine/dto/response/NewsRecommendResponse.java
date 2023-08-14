@@ -13,4 +13,16 @@ public class NewsRecommendResponse {
         this.title = news.getTitle();
         this.pressId = news.getPressId();
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public long getPressId() {
+        return pressId;
+    }
 }
