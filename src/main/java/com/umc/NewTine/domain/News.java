@@ -35,6 +35,7 @@ public class News {
 
     @OneToMany(mappedBy = "news")
     private List<UserNewsHistory> userNewsHistories;
+
     public News(Long id, String title, String content, long category_id, long press_id) {
         this.id = id;
         this.title = title;
@@ -52,7 +53,15 @@ public class News {
         return title;
     }
 
+    public int getViews() {
+        return views;
+    }
+
     public long getPress_id() {
         return press_id;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }
