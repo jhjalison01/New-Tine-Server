@@ -1,5 +1,7 @@
 package com.umc.NewTine.controller;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.service.NewsService;
@@ -8,13 +10,28 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 public class NewsController {
 
     private final NewsService newsService;
 
+
+    @Autowired
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
+    }
+
+    //개별 뉴스기사 
+    @GetMapping("news/{newsId}")
+    public BaseResponse<SingleNewsResponseDto>  getSingleNews(@PathVariable("newsId") Long newsId){
+        //userId 수정하기
+        Long userId=1L;
+        try {
+            return new BaseResponse<>(newsService.getSingleNewsById(userId,newsId));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
     @GetMapping("/news/{userId}/recent") //최근 본 뉴스 조회
@@ -36,6 +53,7 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
 
     @GetMapping("/search") //검색어를 포함하는 뉴스 기사 조회
     public BaseResponse<List<NewsSearchByWordResponse>> searchNewsByWord(@RequestParam String word) {
@@ -61,3 +79,4 @@ public class NewsController {
 
 
 }
+

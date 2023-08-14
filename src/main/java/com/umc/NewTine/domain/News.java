@@ -1,15 +1,19 @@
 package com.umc.NewTine.domain;
 
-import com.sun.istack.NotNull;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
+import com.sun.istack.NotNull;
 
 @NoArgsConstructor
+@Builder
+@Getter
+@Setter
 @Entity
+@Table(name = "news")
 public class News {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = null;
@@ -35,6 +39,19 @@ public class News {
 
     @OneToMany(mappedBy = "news")
     private List<UserNewsHistory> userNewsHistories;
+  
+    //추가-현정
+    @Column(columnDefinition = "TEXT")
+    private String summary;
+  
+    @NotNull
+    @Column
+    private LocalDateTime createdAt;
+  
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="pressId")
+    private Press press;
+    //추가-현정 끝
 
     public News(Long id, String title, String content, long category_id, long press_id) {
         this.id = id;
