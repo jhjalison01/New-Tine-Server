@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/news")
 public class NewsController {
 
     private NewsService newsService;
@@ -34,7 +33,7 @@ public class NewsController {
     }
 
     //스크랩한 뉴스 조회
-    @GetMapping("/scrap")
+    @GetMapping("/news/scrap")
     public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(){
         //userId 수정하기
         Long userId=1L;
@@ -47,7 +46,7 @@ public class NewsController {
 
 
     //뉴스 스크랩하기
-    @PostMapping("/scrap/{newsId}")
+    @PostMapping("/news/scrap/{newsId}")
     public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId){
         //userId 수정하기
         Long userId=1L;
@@ -63,7 +62,7 @@ public class NewsController {
     }
 
     //뉴스기사 스크랩 취소하기
-    @DeleteMapping("/scrap/{newsId}")
+    @DeleteMapping("/news/scrap/{newsId}")
     public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId){
         Long userId = 1L; // 사용자 ID 수정하기
         try {
