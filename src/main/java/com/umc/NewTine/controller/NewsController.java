@@ -37,22 +37,31 @@ public class NewsController {
     @GetMapping("/scrap")
     public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(){
         try{
-            return new BaseResponse<>(newsService.getScrapNews());
+            return new BaseResponse<>(newsService.getScrappedNews());
         } catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
     }
 
-    /*
+
     //뉴스 스크랩하기
     @PostMapping("/scrap/{newsId}")
-    public ResponseEntity<BaseResponse<Object>> scrapNews(@PathVariable("newsId") Long newsId){
-
+    public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId){
+        Long userId=1L;
+        try{
+            if (newsService.saveNewsScrap(userId,newsId)){
+                return new BaseResponse<>(true,HttpStatus.OK.value(),"Success");
+            } else{
+                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+            }
+        } catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
-
+/*
     //스크랩 취소하기
     @DeleteMapping("/scrap/{newsId}")
-    public ResponseEntity<BaseResponse<Object>> cancelScrap(@PathVariable("newsId") Long newsId){
+    public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId){
 
     }
 

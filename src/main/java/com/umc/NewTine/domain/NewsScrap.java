@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "newsScrap")
 public class NewsScrap {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
