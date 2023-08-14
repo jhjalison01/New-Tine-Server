@@ -58,6 +58,4 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
-
 }
