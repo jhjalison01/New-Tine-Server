@@ -3,14 +3,17 @@ package com.umc.NewTine.service;
 import com.umc.NewTine.domain.News;
 import com.umc.NewTine.domain.NewsAndCategory;
 import com.umc.NewTine.domain.Press;
+import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.SingleNewsResponseDto;
 import com.umc.NewTine.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
@@ -31,46 +34,31 @@ public class NewsService {
         this.newsAndCategoryRepository=newsAndCategoryRepository;
     }
 
-
-    public SingleNewsResponseDto getSingleNewsById(Long newsId){
-
-        News news = newsRepository.findById(newsId).orElse(null);
-        if (news==null){
-            //null 처리
-            System.out.println("Service null");
-            return null;
-
-        }
-        //userId 수정하기
-        Long userId= 1L;
+    @Transactional
+    public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
 
         Press press = news.getPress();
-        boolean isScrapped=newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
-        boolean isSubscribed= pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
+        boolean isScrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
+        boolean isSubscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
 
+        List<NewsAndCategory> newsAndCategoryList = newsAndCategoryRepository.findByNewsId(newsId);
+        List<String> category = newsAndCategoryList.stream()
+                .map(data -> newsCategoryRepository.getById(data.getNewsCategory().getId()).getName())
+                .collect(Collectors.toList());
 
-        ArrayList<String> category = new ArrayList<String>(List.of());
-        List<NewsAndCategory> newsAndCategoryList=newsAndCategoryRepository.findByNewsId(newsId);
-
-        for(NewsAndCategory data: newsAndCategoryList){
-            Long categoryId=data.getNewsCategory().getId();
-            category.add(newsCategoryRepository.getById(categoryId).getName());
-        }
-
-
-        SingleNewsResponseDto singleNewsResponseDto=new SingleNewsResponseDto(
-                news.getTitle(),
-                news.getContent(),
-                DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").format(news.getCreatedAt()),
-                press.getName(),
-                press.getImage(),
-                press.getSubscriber(),
-                isSubscribed,
-                isScrapped,
-                category
-        );
-
-        return singleNewsResponseDto;
+        return SingleNewsResponseDto.builder()
+                .title(news.getTitle())
+                .content(news.getContent())
+                .createdAt(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").format(news.getCreatedAt()))
+                .pressName(press.getName())
+                .pressImage(press.getImage())
+                .pressSubscriber(press.getSubscriber())
+                .isSubscribed(isSubscribed)
+                .isScrapped(isScrapped)
+                .category(category)
+                .build();
     }
 
 }

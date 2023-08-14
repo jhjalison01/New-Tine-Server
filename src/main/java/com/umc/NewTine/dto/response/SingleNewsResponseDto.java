@@ -1,9 +1,6 @@
 package com.umc.NewTine.dto.response;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +9,7 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
+@Builder
 public class SingleNewsResponseDto {
     private String title;
     private String content;
