@@ -36,8 +36,10 @@ public class NewsController {
     //스크랩한 뉴스 조회
     @GetMapping("/scrap")
     public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(){
+        //userId 수정하기
+        Long userId=1L;
         try{
-            return new BaseResponse<>(newsService.getScrappedNews());
+            return new BaseResponse<>(newsService.getScrappedNews(userId));
         } catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
@@ -47,6 +49,7 @@ public class NewsController {
     //뉴스 스크랩하기
     @PostMapping("/scrap/{newsId}")
     public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId){
+        //userId 수정하기
         Long userId=1L;
         try{
             if (newsService.saveNewsScrap(userId,newsId)){

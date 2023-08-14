@@ -79,16 +79,15 @@ public class NewsService {
 
     //스크랩한 기사 가져오기
     @Transactional
-    public List<ScrapNewsResponseDto> getScrappedNews() throws BaseException {
-        //userId 수정하기
-        Long userId=1L;
+    public List<ScrapNewsResponseDto> getScrappedNews(Long userId) throws BaseException {
+
         List<NewsScrap> newsScrapList=newsScrapRepository.findAllByUserId(userId);
 
         return newsScrapList.stream()
                 .map(this::mapNewsScrapToResponseDto)
                 .collect(Collectors.toList());
     }
-    //map 메소드에 쓸 함수 정의
+    //뉴스 제목, 생성 날짜, 언론사 이름 매핑
     private ScrapNewsResponseDto mapNewsScrapToResponseDto(NewsScrap newsScrap) {
         News news = newsScrap.getNews();
         Press press = news.getPress();
