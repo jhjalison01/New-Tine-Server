@@ -23,11 +23,11 @@ public class News {
 
     @NotNull
     @Column
-    private long category_id;
+    private long categoryId;
 
     @NotNull
     @Column
-    private long press_id;
+    private long pressId;
 
     @NotNull
     @Column
@@ -36,12 +36,12 @@ public class News {
     @OneToMany(mappedBy = "news")
     private List<UserNewsHistory> userNewsHistories;
 
-    public News(Long id, String title, String content, long category_id, long press_id) {
+    public News(Long id, String title, String content, long categoryId, long pressId) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.category_id = category_id;
-        this.press_id = press_id;
+        this.categoryId = categoryId;
+        this.pressId = pressId;
         this.views = 0;
     }
 
@@ -57,8 +57,8 @@ public class News {
         return views;
     }
 
-    public long getPress_id() {
-        return press_id;
+    public long getPressId() {
+        return pressId;
     }
 
     public void setViews(int views) {
