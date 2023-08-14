@@ -117,4 +117,13 @@ public class NewsService {
         return true;
     }
 
+    @Transactional
+    public boolean deleteNewsScrap(Long userId, Long newsId) throws BaseException{
+        NewsScrap newsScrap = newsScrapRepository.findByUserIdAndNewsId(userId, newsId)
+                .orElseThrow(() -> new EntityNotFoundException("NewsScrap not found"));
+
+        newsScrapRepository.delete(newsScrap);
+        return true;
+    }
+
 }

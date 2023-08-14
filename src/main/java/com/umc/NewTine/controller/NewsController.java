@@ -58,14 +58,21 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-/*
-    //스크랩 취소하기
+
+    //뉴스기사 스크랩 취소하기
     @DeleteMapping("/scrap/{newsId}")
     public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId){
-
+        Long userId = 1L; // 사용자 ID 수정하기
+        try {
+            if (newsService.deleteNewsScrap(userId, newsId)) {
+                return new BaseResponse<>(true,HttpStatus.OK.value(),"Success");
+            } else{
+                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+            }
+        } catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
-
-     */
 
 
 }
