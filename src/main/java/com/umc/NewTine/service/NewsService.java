@@ -6,13 +6,11 @@ import com.umc.NewTine.dto.response.*;
 import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_NEWS_YET;
 import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
-import com.umc.NewTine.repository.*;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,10 +42,9 @@ public class NewsService {
     }
     
 
-@Service
-public class NewsService {
+
   
-    public SingleNewsResponseDto getSingleNewsById(Long newsId){
+
     @Transactional
     public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
         News news = newsRepository.findById(newsId)
