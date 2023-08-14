@@ -2,7 +2,10 @@ package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.News;
 import com.umc.NewTine.domain.NewsAndCategory;
+import com.umc.NewTine.domain.NewsScrap;
 import com.umc.NewTine.domain.Press;
+import com.umc.NewTine.dto.response.BaseException;
+import com.umc.NewTine.dto.response.ScrapNewsResponseDto;
 import com.umc.NewTine.dto.response.SingleNewsResponseDto;
 import com.umc.NewTine.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
@@ -29,6 +33,27 @@ public class NewsService {
         this.newsScrapRepository=newsScrapRepository;
         this.newsCategoryRepository=newsCategoryRepository;
         this.newsAndCategoryRepository=newsAndCategoryRepository;
+    }
+
+    //스크랩한 기사 가져오기
+    public List<ScrapNewsResponseDto> getScrapNews() throws BaseException {
+        //userId 수정하기
+        Long userId=1L;
+        List<NewsScrap> newsScrapList=newsScrapRepository.findAllByUserId(userId);
+
+        return newsScrapList.stream()
+                .map(this::mapNewsScrapToResponseDto)
+                .collect(Collectors.toList());
+    }
+    //map 메소드에 쓸 함수 정의
+    private ScrapNewsResponseDto mapNewsScrapToResponseDto(NewsScrap newsScrap) {
+        News news = newsScrap.getNews();
+        Press press = news.getPress();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        String formattedDate = formatter.format(news.getCreatedAt());
+
+        return new ScrapNewsResponseDto(news.getTitle(), formattedDate, press.getName());
     }
 
 
