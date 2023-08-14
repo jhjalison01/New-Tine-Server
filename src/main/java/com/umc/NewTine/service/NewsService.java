@@ -1,13 +1,11 @@
 package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.News;
+import com.umc.NewTine.domain.NewsAndCategory;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.domain.UserNewsHistory;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
-import com.umc.NewTine.dto.response.BaseException;
-import com.umc.NewTine.dto.response.NewsRankingResponse;
-import com.umc.NewTine.dto.response.NewsRecentResponse;
-import com.umc.NewTine.dto.response.NewsSearchByWordResponse;
+import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.repository.NewsRepository;
 import com.umc.NewTine.repository.UserNewsHistoryRepository;
 import com.umc.NewTine.repository.UserRepository;
@@ -64,6 +62,18 @@ public class NewsService {
                 .orElse(List.of());
         return newsList.stream()
                 .map(NewsSearchByWordResponse::new)
+                .limit(5)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional //추천 뉴스 조회
+    public List<NewsRecommendResponse> getRecommendNews(Long userId) throws BaseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new BaseException(NO_USER_ID));
+        List<News> newsList = NewsAndCategoryRepository.findNewsByUserInterest(user)
+                .orElse(List.of());
+        return newsList.stream()
+                .map(NewsRecommendResponse::new)
                 .limit(5)
                 .collect(Collectors.toList());
     }
