@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -46,6 +47,10 @@ public class User extends BaseEntity{
     @Column
     private String providerId;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserNewsHistory> userNewsHistories;
+
+
     @Builder
     public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
         this.nickname = nickname;
@@ -65,4 +70,13 @@ public class User extends BaseEntity{
 
         return this;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
 }
