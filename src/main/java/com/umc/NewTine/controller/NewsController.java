@@ -1,24 +1,26 @@
 package com.umc.NewTine.controller;
 
+import com.umc.NewTine.dto.request.CommentRequestDto;
+import com.umc.NewTine.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.service.NewsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 public class NewsController {
 
     private final NewsService newsService;
 
+    private final CommentService commentService;
 
-    @Autowired
-    public NewsController(NewsService newsService) {
-        this.newsService = newsService;
-    }
 
     //개별 뉴스기사
     @GetMapping("news/{newsId}")
@@ -117,6 +119,26 @@ public class NewsController {
         } catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
+    }
+
+    @GetMapping("/news/{newsId}/comments")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long newsId) {
+        List<CommentResponseDto> commentDTOs = commentService.getCommnetsByNewsId(newsId);
+        return ResponseEntity.ok(commentDTOs);
+    }
+
+    @PostMapping("/news/{newsId}/comments")
+    public ResponseEntity<CommentResponseDto> addCommentToPost(
+            @PathVariable Long postId,
+            @RequestBody CommentRequestDto commentRequest) {
+        CommentResponseDto addedComment = commentService.addCommentToPost(postId, commentRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedComment);
+    }
+
+    @PatchMapping("news/comments/{commentId}")
+    public ResponseEntity<CommentResponseDto> likeComment(@PathVariable Long commentId) {
+        CommentResponseDto likedComment = commentService.likeComment(commentId);
+        return ResponseEntity.ok(likedComment);
     }
 
 

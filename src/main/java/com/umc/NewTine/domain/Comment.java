@@ -21,14 +21,22 @@ public class Comment extends BaseTimeEntity{
     private String content;
 
     @Column
-    private Long like;
+    private int like;
 
     @JoinColumn(name="news_id")
     @ManyToOne
     private News news;
 
+    public void setLike(){
+        this.like = 0;
+    }
+
+    public void updateLike(){
+        this.like++;
+    }
+
     @Builder
-    public Comment(String content, Long like, News news) {
+    public Comment(String content, int like, News news) {
         this.content = content;
         this.like = like;
         this.news = news;
