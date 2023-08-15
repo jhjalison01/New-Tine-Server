@@ -1,24 +1,21 @@
 package com.umc.NewTine.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
-@Table(name = "press")
-public class Press extends BaseTimeEntity{
-
+@Table(name = "newsCategory")
+public class NewsCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String image;
-    private int subscriber;
+
 
 }

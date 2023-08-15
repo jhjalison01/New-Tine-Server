@@ -42,9 +42,6 @@ public class NewsService {
     }
 
 
-
-
-
     @Transactional
     public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
         News news = newsRepository.findById(newsId)
@@ -179,3 +176,4 @@ public class NewsService {
 
 
 }
+

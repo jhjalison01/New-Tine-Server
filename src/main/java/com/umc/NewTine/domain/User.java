@@ -1,6 +1,5 @@
 package com.umc.NewTine.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import com.umc.NewTine.config.Role;
@@ -8,12 +7,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
+import java.util.List;
 
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="user")
 public class User extends BaseTimeEntity{
@@ -46,6 +45,10 @@ public class User extends BaseTimeEntity{
     @Column
     private String providerId;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserNewsHistory> userNewsHistories;
+
+
     @Builder
     public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
         this.nickname = nickname;
@@ -65,4 +68,13 @@ public class User extends BaseTimeEntity{
 
         return this;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
 }
