@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @AllArgsConstructor
@@ -12,11 +11,21 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "habit")
+public class Habit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int nums;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public void updateNums(int nums) {
+        this.nums = nums;
+    }
+
 
 }

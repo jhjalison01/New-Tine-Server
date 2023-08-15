@@ -9,7 +9,8 @@ public enum BaseResponseStatus {
     SUCCESS(true, 200, "요청에 성공했습니다."),
 
     NO_NEWS_YET(true, 200, "뉴스가 없습니다."),
-    NO_USER_ID(true, 200, "해당 id의 유저가 없습니다");
+    NO_USER_ID(true, 200, "해당 id의 유저가 없습니다"),
+    SUCCESS_TO_SET_HABIT(true, 200, "습관 설정에 성공했습니다");
 
 
 
