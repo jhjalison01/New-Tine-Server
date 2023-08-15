@@ -1,6 +1,9 @@
 package com.umc.NewTine.controller;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/feature/#17-set-habit
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewsDto;
 import com.umc.NewTine.dto.response.BaseResponse;
@@ -102,9 +105,6 @@ public class NewsController {
         }
     }
 
-}
-
-
     //스크랩한 뉴스 조회
     @GetMapping("/news/scrap")
     public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(){
@@ -151,4 +151,7 @@ public class NewsController {
 
 
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/feature/#17-set-habit

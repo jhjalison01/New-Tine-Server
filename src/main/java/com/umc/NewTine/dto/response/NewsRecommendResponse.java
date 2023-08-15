@@ -11,7 +11,7 @@ public class NewsRecommendResponse {
     public NewsRecommendResponse(News news) {
         this.id = news.getId();
         this.title = news.getTitle();
-        this.pressId = news.getPressId();
+        this.pressId = news.getPress().getId();
     }
 
     public long getId() {

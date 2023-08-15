@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+<<<<<<< HEAD
 import java.util.List;
 import java.time.LocalDateTime;
 import com.sun.istack.NotNull;
+=======
+>>>>>>> origin/feature/#17-set-habit
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +32,17 @@ public class News extends BaseTimeEntity{
 
     private String image;
 
+<<<<<<< HEAD
     private String subject;
+=======
+    private String summary;
+
+    private String subject;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="pressId")
+    private Press press;    
+>>>>>>> origin/feature/#17-set-habit
 
     @NotNull
     @Column
@@ -75,4 +88,8 @@ public class News extends BaseTimeEntity{
     public void setViews(int views) {
         this.views = views;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/feature/#17-set-habit
