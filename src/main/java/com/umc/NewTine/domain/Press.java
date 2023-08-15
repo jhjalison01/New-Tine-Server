@@ -1,12 +1,13 @@
 package com.umc.NewTine.domain;
 
 import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,7 +26,5 @@ public class Press extends BaseTimeEntity{
 
     private int subscriber;
 
-//    @OneToMany(mappedBy = "press")
-//    private List<News> newsList = new ArrayList<>();
 
 }
