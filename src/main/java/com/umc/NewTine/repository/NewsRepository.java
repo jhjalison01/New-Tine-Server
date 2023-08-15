@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface NewsRepository extends JpaRepository<News, Long> {
     Optional<News> findById(Long id);
     Optional<List<News>> findAllByOrderByViewsDesc();
-
     @Query("SELECT n FROM News n WHERE n.title LIKE %:word%")
     Optional<List<News>> findNewsByTitleContaining(@Param("word") String word);
 

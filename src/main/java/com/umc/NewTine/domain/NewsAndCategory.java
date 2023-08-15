@@ -12,14 +12,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "newsAndCategory")
 public class NewsAndCategory {
+
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = null;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="categoryId")
+    @JoinColumn(name="category_id")
     private NewsCategory newsCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="newsId")
+    @JoinColumn(name="news_id")
     private News news;
 }

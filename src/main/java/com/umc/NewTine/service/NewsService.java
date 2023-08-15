@@ -1,5 +1,6 @@
 package com.umc.NewTine.service;
 
+
 import com.umc.NewTine.domain.*;
 import com.umc.NewTine.repository.*;
 import com.umc.NewTine.dto.response.*;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ public class NewsService {
     private final NewsAndCategoryRepository newsAndCategoryRepository;
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
+    private final NewsAndCategoryRepository newsAndCategoryRepository;
 
 
     @Autowired
@@ -39,6 +42,7 @@ public class NewsService {
         this.newsAndCategoryRepository=newsAndCategoryRepository;
         this.userRepository = userRepository;
         this.userNewsHistoryRepository = userNewsHistoryRepository;
+        this.newsAndCategoryRepository = newsAndCategoryRepository;
     }
     
 
@@ -152,6 +156,19 @@ public class NewsService {
         return newsList.stream()
                 .map(NewsSearchByWordResponse::new)
                 .limit(5)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional //추천 뉴스 조회
+    public List<NewsRecommendResponse> getRecommendNews(Long userId) throws BaseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new BaseException(NO_USER_ID));
+        List<News> newsList = newsAndCategoryRepository.findNewsByUserInterest(userId)
+                .orElse(List.of());
+        Collections.shuffle(newsList); //랜덤하게 4개 추천
+        return newsList.stream()
+                .map(NewsRecommendResponse::new)
+                .limit(4)
                 .collect(Collectors.toList());
     }
 

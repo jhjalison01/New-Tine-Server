@@ -62,6 +62,15 @@ public class NewsController {
         }
     }
 
+    @GetMapping("/news/{userId}/recommend") //추천 뉴스 조회
+    public BaseResponse<List<NewsRecommendResponse>> getRecommendNews(@PathVariable Long userId) {
+        try {
+            return new BaseResponse<>(newsService.getRecommendNews(userId));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @PostMapping("/news") //사용자-뉴스 기록 저장, viewCount 증가
     public BaseResponse<Void> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
         try {
@@ -74,6 +83,9 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+}
+
 
     //스크랩한 뉴스 조회
     @GetMapping("/news/scrap")

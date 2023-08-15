@@ -25,13 +25,13 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @NotNull
-    @Column
-    private long category_id;
+//    @NotNull
+//    @Column
+//    private long categoryId;
 
     @NotNull
     @Column
-    private long press_id;
+    private long pressId;
 
     @NotNull
     @Column
@@ -53,12 +53,11 @@ public class News {
     private Press press;
     //추가-현정 끝
 
-    public News(Long id, String title, String content, long category_id, long press_id) {
+    public News(Long id, String title, String content, long categoryId, long pressId) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.category_id = category_id;
-        this.press_id = press_id;
+        this.pressId = pressId;
         this.views = 0;
     }
 
@@ -74,8 +73,8 @@ public class News {
         return views;
     }
 
-    public long getPress_id() {
-        return press_id;
+    public long getPressId() {
+        return pressId;
     }
 
     public void setViews(int views) {
