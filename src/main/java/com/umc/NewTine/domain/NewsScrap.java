@@ -10,18 +10,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "newsAndCategory")
-public class NewsAndCategory {
-
+@Table(name = "newsScrap")
+public class NewsScrap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="category_id")
-    private NewsCategory newsCategory;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="news_id")
+    @JoinColumn(name="newsId")
     private News news;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="userId")
+    private User user;
 }

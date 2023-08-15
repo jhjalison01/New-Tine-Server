@@ -2,6 +2,7 @@ package com.umc.NewTine.repository;
 
 import com.umc.NewTine.domain.News;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -15,5 +16,3 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     Optional<List<News>> findNewsByTitleContaining(@Param("word") String word);
 
 }
-
-

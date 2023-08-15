@@ -1,42 +1,130 @@
 package com.umc.NewTine.service;
 
-import com.umc.NewTine.domain.News;
-import com.umc.NewTine.domain.NewsAndCategory;
-import com.umc.NewTine.domain.User;
-import com.umc.NewTine.domain.UserNewsHistory;
-import com.umc.NewTine.dto.request.NewsRecentRequest;
+
+import com.umc.NewTine.domain.*;
+import com.umc.NewTine.repository.*;
 import com.umc.NewTine.dto.response.*;
-import com.umc.NewTine.repository.NewsAndCategoryRepository;
-import com.umc.NewTine.repository.NewsRepository;
-import com.umc.NewTine.repository.UserNewsHistoryRepository;
-import com.umc.NewTine.repository.UserRepository;
+import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_NEWS_YET;
+import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
+import com.umc.NewTine.dto.request.NewsRecentRequest;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_NEWS_YET;
-import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
-
 @Service
 public class NewsService {
     private final NewsRepository newsRepository;
+    private final NewsScrapRepository newsScrapRepository;
+    private final PressSubscriptionRepository pressSubscriptionRepository;
+    private final NewsCategoryRepository newsCategoryRepository;
+    private final NewsAndCategoryRepository newsAndCategoryRepository;
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
     private final NewsAndCategoryRepository newsAndCategoryRepository;
 
-    public NewsService(NewsRepository newsRepository,
-                       UserRepository userRepository,
-                       UserNewsHistoryRepository userNewsHistoryRepository,
-                       NewsAndCategoryRepository newsAndCategoryRepository) {
-        this.newsRepository = newsRepository;
+
+    @Autowired
+    public NewsService(NewsRepository newsRepository,PressSubscriptionRepository pressSubscriptionRepository,
+                       NewsScrapRepository newsScrapRepository, NewsCategoryRepository newsCategoryRepository,
+                       NewsAndCategoryRepository newsAndCategoryRepository, UserRepository userRepository,
+                       UserNewsHistoryRepository userNewsHistoryRepository) {
+        this.newsRepository=newsRepository;
+        this.pressSubscriptionRepository=pressSubscriptionRepository;
+        this.newsScrapRepository=newsScrapRepository;
+        this.newsCategoryRepository=newsCategoryRepository;
+        this.newsAndCategoryRepository=newsAndCategoryRepository;
         this.userRepository = userRepository;
         this.userNewsHistoryRepository = userNewsHistoryRepository;
         this.newsAndCategoryRepository = newsAndCategoryRepository;
     }
+    
+
+
+  
+
+    @Transactional
+    public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
+
+        Press press = news.getPress();
+        boolean scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
+        boolean subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
+
+        List<NewsAndCategory> newsAndCategoryList = newsAndCategoryRepository.findByNewsId(newsId);
+        List<String> category = newsAndCategoryList.stream()
+                .map(data -> newsCategoryRepository.getById(data.getNewsCategory().getId()).getName())
+                .collect(Collectors.toList());
+
+        return SingleNewsResponseDto.builder()
+                .title(news.getTitle())
+                .content(news.getContent())
+                .createdAt(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").format(news.getCreatedAt()))
+                .pressName(press.getName())
+                .pressImage(press.getImage())
+                .pressSubscriber(press.getSubscriber())
+                .subscribed(subscribed)
+                .scrapped(scrapped)
+                .category(category)
+                .build();
+    }
+  
+    //스크랩한 기사 가져오기
+    @Transactional
+    public List<ScrapNewsResponseDto> getScrappedNews(Long userId) throws BaseException {
+
+        List<NewsScrap> newsScrapList=newsScrapRepository.findAllByUserId(userId);
+
+        return newsScrapList.stream()
+                .map(this::mapNewsScrapToResponseDto)
+                .collect(Collectors.toList());
+    }
+    //뉴스 제목, 생성 날짜, 언론사 이름 매핑
+    private ScrapNewsResponseDto mapNewsScrapToResponseDto(NewsScrap newsScrap) {
+        News news = newsScrap.getNews();
+        Press press = news.getPress();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        String formattedDate = formatter.format(news.getCreatedAt());
+
+        return new ScrapNewsResponseDto(news.getTitle(), formattedDate, press.getName());
+    }
+
+    //newsScrap 저장
+    @Transactional
+    public boolean saveNewsScrap(Long userId,Long newsId) throws BaseException{
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
+
+        NewsScrap newsScrap = new NewsScrap();
+        newsScrap.setUser(user);
+        newsScrap.setNews(news);
+
+        newsScrapRepository.save(newsScrap);
+
+        return true;
+    }
+
+    //newsScrap 삭제
+    @Transactional
+    public boolean deleteNewsScrap(Long userId, Long newsId) throws BaseException{
+        NewsScrap newsScrap = newsScrapRepository.findByUserIdAndNewsId(userId, newsId)
+                .orElseThrow(() -> new EntityNotFoundException("NewsScrap not found"));
+
+        newsScrapRepository.delete(newsScrap);
+        return true;
+    }
+   
 
     @Transactional //최근 본 뉴스 조회
     public List<NewsRecentResponse> getRecentNews(Long userId) throws BaseException {
@@ -108,3 +196,4 @@ public class NewsService {
 
 
 }
+
