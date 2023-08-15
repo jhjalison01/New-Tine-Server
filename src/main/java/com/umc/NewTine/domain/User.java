@@ -11,7 +11,6 @@ import javax.persistence.*;
 import java.util.List;
 
 
-@Builder
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

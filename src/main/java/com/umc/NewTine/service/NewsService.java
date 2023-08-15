@@ -27,7 +27,6 @@ public class NewsService {
     private final NewsAndCategoryRepository newsAndCategoryRepository;
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
-    private final NewsAndCategoryRepository newsAndCategoryRepository;
 
     @Transactional(readOnly = true)
     public List<NewsDto> getHomeNews() throws BaseException {
@@ -54,7 +53,6 @@ public class NewsService {
         this.newsAndCategoryRepository=newsAndCategoryRepository;
         this.userRepository = userRepository;
         this.userNewsHistoryRepository = userNewsHistoryRepository;
-        this.newsAndCategoryRepository = newsAndCategoryRepository;
     }
 
     @Transactional

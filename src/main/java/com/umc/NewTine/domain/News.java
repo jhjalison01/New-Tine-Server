@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 @Entity
 @Table(name = "news")
@@ -55,11 +54,11 @@ public class News extends BaseTimeEntity{
     private Press press;
     //추가-현정 끝
 
-    public News(Long id, String title, String content, long categoryId, long pressId) {
+    public News(Long id, String title, String content, Press press) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.pressId = pressId;
+        this.press = press;
         this.views = 0;
     }
 
@@ -75,9 +74,6 @@ public class News extends BaseTimeEntity{
         return views;
     }
 
-    public long getPressId() {
-        return pressId;
-    }
 
     public void setViews(int views) {
         this.views = views;
