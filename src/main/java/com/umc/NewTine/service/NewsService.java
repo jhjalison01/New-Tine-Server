@@ -8,13 +8,14 @@ import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewsDto;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import javax.persistence.EntityNotFoundException;
+
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_NEWS_YET;
 import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -38,13 +39,6 @@ public class NewsService {
     public List<NewsDto> getHomeNews() throws BaseException {
         List<News> allNews = newsRepository.findNews().get();
 
-<<<<<<< HEAD
-    @Transactional(readOnly = true)
-    public List<NewsDto> getHomeNews() throws BaseException {
-        List<News> allNews = newsRepository.findNews().get();
-
-=======
->>>>>>> origin/feature/#17-set-habit
         if (allNews.isEmpty()) {
             throw new BaseException(NO_NEWS_YET);
         } else {
@@ -52,24 +46,8 @@ public class NewsService {
                     .map(news -> NewsDto.from(news, news.getPress()))
                     .collect(Collectors.toList());
         }
-<<<<<<< HEAD
-=======
-  
-  
-    @Autowired
-    public NewsService(NewsRepository newsRepository,PressSubscriptionRepository pressSubscriptionRepository,
-                       NewsScrapRepository newsScrapRepository, NewsCategoryRepository newsCategoryRepository,
-                       NewsAndCategoryRepository newsAndCategoryRepository, UserRepository userRepository,
-                       UserNewsHistoryRepository userNewsHistoryRepository) {
-        this.newsRepository=newsRepository;
-        this.pressSubscriptionRepository=pressSubscriptionRepository;
-        this.newsScrapRepository=newsScrapRepository;
-        this.newsCategoryRepository=newsCategoryRepository;
-        this.newsAndCategoryRepository=newsAndCategoryRepository;
-        this.userRepository = userRepository;
-        this.userNewsHistoryRepository = userNewsHistoryRepository;
->>>>>>> origin/feature/#17-set-habit
     }
+
 
     @Transactional
     public SingleNewsResponseDto getSingleNewsById(Long userId, Long newsId) throws BaseException {
@@ -218,7 +196,3 @@ public class NewsService {
     }
 
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/feature/#17-set-habit

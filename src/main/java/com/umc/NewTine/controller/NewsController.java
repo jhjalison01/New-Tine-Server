@@ -1,9 +1,5 @@
 package com.umc.NewTine.controller;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/feature/#17-set-habit
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewsDto;
 import com.umc.NewTine.dto.response.BaseResponse;
@@ -24,30 +20,29 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/news")
 @Slf4j
 public class NewsController {
 
     private final NewsService newsService;
 
-    @GetMapping("")  // 홈 화면 뉴스 조회하기
+
+    @GetMapping("/news")  // 홈 화면 뉴스 조회하기
     public BaseResponse<List<NewsDto>> getHomeNews() {
 
         try {
             return new BaseResponse<>(newsService.getHomeNews());
-
-    @Autowired
-    public NewsController(NewsService newsService) {
-        this.newsService = newsService;
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
     //개별 뉴스기사
     @GetMapping("news/{newsId}")
-    public BaseResponse<SingleNewsResponseDto>  getSingleNews(@PathVariable("newsId") Long newsId){
+    public BaseResponse<SingleNewsResponseDto> getSingleNews(@PathVariable("newsId") Long newsId) {
         //userId 수정하기
-        Long userId=1L;
+        Long userId = 1L;
         try {
-            return new BaseResponse<>(newsService.getSingleNewsById(userId,newsId));
+            return new BaseResponse<>(newsService.getSingleNewsById(userId, newsId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -107,12 +102,12 @@ public class NewsController {
 
     //스크랩한 뉴스 조회
     @GetMapping("/news/scrap")
-    public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(){
+    public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews() {
         //userId 수정하기
-        Long userId=1L;
-        try{
+        Long userId = 1L;
+        try {
             return new BaseResponse<>(newsService.getScrappedNews(userId));
-        } catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }
@@ -120,38 +115,32 @@ public class NewsController {
 
     //뉴스 스크랩하기
     @PostMapping("/news/scrap/{newsId}")
-    public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId){
+    public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId) {
         //userId 수정하기
-        Long userId=1L;
-        try{
-            if (newsService.saveNewsScrap(userId,newsId)){
-                return new BaseResponse<>(true,HttpStatus.OK.value(),"Success");
-            } else{
-                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+        Long userId = 1L;
+        try {
+            if (newsService.saveNewsScrap(userId, newsId)) {
+                return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
+            } else {
+                return new BaseResponse<>(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fail");
             }
-        } catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }
 
     //뉴스기사 스크랩 취소하기
     @DeleteMapping("/news/scrap/{newsId}")
-    public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId){
+    public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId) {
         Long userId = 1L; // 사용자 ID 수정하기
         try {
             if (newsService.deleteNewsScrap(userId, newsId)) {
-                return new BaseResponse<>(true,HttpStatus.OK.value(),"Success");
-            } else{
-                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+                return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
+            } else {
+                return new BaseResponse<>(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fail");
             }
-        } catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
-
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/feature/#17-set-habit
