@@ -1,21 +1,21 @@
 package com.umc.NewTine.domain;
 
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
-import com.sun.istack.NotNull;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "news")
-public class News {
+public class News extends BaseTimeEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long id;
 
     @NotNull
     @Column
@@ -24,13 +24,15 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-//    @NotNull
-//    @Column
-//    private long categoryId;
+    private String image;
 
-//    @NotNull
-//    @Column
-//    private long pressId;
+    private String summary;
+
+    private String subject;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="pressId")
+    private Press press;    
 
     @NotNull
     @Column

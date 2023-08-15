@@ -49,8 +49,6 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user")
     private List<UserNewsHistory> userNewsHistories;
 
-
-
     @Builder
     public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
         this.nickname = nickname;
@@ -61,7 +59,6 @@ public class User extends BaseEntity{
         this.provider = provider;
         this.providerId = providerId;
     }
-
 
 
     public User update(String nickname, String image){

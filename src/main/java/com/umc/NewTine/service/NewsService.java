@@ -1,6 +1,5 @@
 package com.umc.NewTine.service;
 
-
 import com.umc.NewTine.domain.*;
 import com.umc.NewTine.repository.*;
 import com.umc.NewTine.dto.response.*;
@@ -11,6 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -28,7 +28,19 @@ public class NewsService {
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
 
+    @Transactional(readOnly = true)
+    public List<NewsDto> getHomeNews() throws BaseException {
+        List<News> allNews = newsRepository.findNews().get();
 
+        if (allNews.isEmpty()) {
+            throw new BaseException(NO_NEWS_YET);
+        } else {
+            return allNews.stream()
+                    .map(news -> NewsDto.from(news, news.getPress()))
+                    .collect(Collectors.toList());
+        }
+  
+  
     @Autowired
     public NewsService(NewsRepository newsRepository,PressSubscriptionRepository pressSubscriptionRepository,
                        NewsScrapRepository newsScrapRepository, NewsCategoryRepository newsCategoryRepository,
@@ -42,10 +54,6 @@ public class NewsService {
         this.userRepository = userRepository;
         this.userNewsHistoryRepository = userNewsHistoryRepository;
     }
-    
-
-
-  
 
     @Transactional
     public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
@@ -192,6 +200,4 @@ public class NewsService {
         return true;
     }
 
-
 }
-
