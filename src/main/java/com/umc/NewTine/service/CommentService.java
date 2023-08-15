@@ -20,8 +20,17 @@ public class CommentService {
 
     private final NewsRepository newsRepository;
 
-    public List<CommentResponseDto> getCommnetsByNewsId(Long newsId){
-        List<Comment> comments = commentRepository.findByNewsId(newsId);
+    public List<CommentResponseDto> getCommnetsByNewsId(Long newsId, String orderBy){
+        List<Comment> comments;
+
+        if ("latest".equalsIgnoreCase(orderBy)) {
+            comments = commentRepository.findByNewsIdOrderByCreatedAtDesc(newsId);
+        } else if ("most-liked".equalsIgnoreCase(orderBy)) {
+            comments = commentRepository.findByNewsIdOrderByLikeDesc(newsId);
+        } else {
+            throw new IllegalArgumentException("Invalid orderBy parameter");
+        }
+
 
         List<CommentResponseDto> commentDtos = comments.stream()
                 .map(comment -> new CommentResponseDto(comment))
@@ -30,7 +39,7 @@ public class CommentService {
         return commentDtos;
     }
 
-    public CommentResponseDto addCommentToPost(Long newsId, CommentRequestDto commentRequest) {
+    public CommentResponseDto addCommentToNews(Long newsId, CommentRequestDto commentRequest) {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new EntityNotFoundException("News not found"));
 

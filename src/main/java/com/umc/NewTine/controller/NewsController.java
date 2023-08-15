@@ -122,8 +122,10 @@ public class NewsController {
     }
 
     @GetMapping("/news/{newsId}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long newsId) {
-        List<CommentResponseDto> commentDTOs = commentService.getCommnetsByNewsId(newsId);
+    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(
+            @PathVariable Long newsId,
+            @RequestParam(required = false) String orderBy) {
+        List<CommentResponseDto> commentDTOs = commentService.getCommnetsByNewsId(newsId, orderBy);
         return ResponseEntity.ok(commentDTOs);
     }
 
@@ -131,7 +133,7 @@ public class NewsController {
     public ResponseEntity<CommentResponseDto> addCommentToPost(
             @PathVariable Long postId,
             @RequestBody CommentRequestDto commentRequest) {
-        CommentResponseDto addedComment = commentService.addCommentToPost(postId, commentRequest);
+        CommentResponseDto addedComment = commentService.addCommentToNews(postId, commentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedComment);
     }
 
