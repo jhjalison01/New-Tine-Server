@@ -4,8 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Getter
+@Setter
 @Entity
+@Table(name = "newsCategory")
 public class NewsCategory {
 
     @Id
