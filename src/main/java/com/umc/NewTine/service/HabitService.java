@@ -39,8 +39,11 @@ public class HabitService {
     public void setHabit(Long userId, int num) throws BaseException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
+
         Habit habit = habitRepository.findByUser(user).get();
+        int prev_nums = habit.getNums();
         habit.updateNums(num);
+        log.info("습관 업데이트 {} -> {}", prev_nums, num);
     }
 
 }
