@@ -9,8 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface NewsAndCategoryRepository extends JpaRepository<NewsAndCategory,Long>{
+public interface NewsAndCategoryRepository extends JpaRepository<NewsAndCategory,Long> {
     List<NewsAndCategory> findByNewsId(Long newsId);
 
     @Query("SELECT DISTINCT n.news FROM NewsAndCategory n JOIN UserInterest u ON n.newsCategory.id = u.newsCategory.id WHERE u.user.id = :userId")
     Optional<List<News>> findNewsByUserInterest(@Param("userId") Long userId);
+}

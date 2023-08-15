@@ -24,7 +24,7 @@ public class NewsRecentResponse {
     public NewsRecentResponse(News news) {
         this.id = news.getId();
         this.title = news.getTitle();
-        this.pressId = news.getPressId();
+        this.pressId = news.getPress().getId();
 
     }
 

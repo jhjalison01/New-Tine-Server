@@ -84,8 +84,6 @@ public class NewsController {
         }
     }
 
-}
-
 
     //스크랩한 뉴스 조회
     @GetMapping("/news/scrap")

@@ -8,7 +8,6 @@ import java.util.List;
 import com.sun.istack.NotNull;
 
 @NoArgsConstructor
-@Builder
 @Getter
 @Setter
 @Entity
@@ -29,9 +28,9 @@ public class News {
 //    @Column
 //    private long categoryId;
 
-    @NotNull
-    @Column
-    private long pressId;
+//    @NotNull
+//    @Column
+//    private long pressId;
 
     @NotNull
     @Column
@@ -53,11 +52,11 @@ public class News {
     private Press press;
     //추가-현정 끝
 
-    public News(Long id, String title, String content, long categoryId, long pressId) {
+    public News(Long id, String title, String content, Press press) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.pressId = pressId;
+        this.press = press;
         this.views = 0;
     }
 
@@ -73,9 +72,6 @@ public class News {
         return views;
     }
 
-    public long getPressId() {
-        return pressId;
-    }
 
     public void setViews(int views) {
         this.views = views;
