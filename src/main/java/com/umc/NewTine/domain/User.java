@@ -3,6 +3,7 @@ package com.umc.NewTine.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import com.umc.NewTine.config.Role;
+import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +28,10 @@ public class User extends BaseTimeEntity{
     @Column
     private String email;
 
+    @Column
+    private String interest;
+
+
     @Column(columnDefinition = "TEXT")
     private String image;
 
@@ -50,9 +55,10 @@ public class User extends BaseTimeEntity{
 
 
     @Builder
-    public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
+    public User(String nickname, String email, String interest, String image, Role role, String password, String provider, String providerId) {
         this.nickname = nickname;
         this.email = email;
+        this.interest = interest;
         this.image = image;
         this.role = role;
         this.password = password;
@@ -67,6 +73,12 @@ public class User extends BaseTimeEntity{
         this.image = image;
 
         return this;
+    }
+
+    public void updateUser(UserUpdateRequestDto userUpdateRequestDto){
+        this.nickname = userUpdateRequestDto.getNickname();
+        this.image = userUpdateRequestDto.getImage();
+        this.interest = userUpdateRequestDto.getInterest();
     }
 
     public Long getId() {

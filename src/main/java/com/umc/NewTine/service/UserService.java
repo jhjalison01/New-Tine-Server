@@ -2,12 +2,16 @@ package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.SignupRequestDto;
+import com.umc.NewTine.dto.request.UserUpdateRequestDto;
+import com.umc.NewTine.dto.response.UserUpdateResponseDto;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -75,14 +79,14 @@ public class UserService{
 //
 //    }
 
-//    @Transactional
-//    public UserUpdateResponseDto updateUser(Long userId, UserUpdateRequestDto updateRequestDto){
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-//        user.update(updateRequestDto);
-//
-//        return new UserUpdateResponseDto(userRepository.save(user), "정보가 수정되었습니다.");
-//    }
+    @Transactional
+    public UserUpdateResponseDto updateUser(Long userId, UserUpdateRequestDto updateRequestDto){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.updateUser(updateRequestDto);
+
+        return new UserUpdateResponseDto(userRepository.save(user), "정보가 수정되었습니다.");
+    }
 
 
 }

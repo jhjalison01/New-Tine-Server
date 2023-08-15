@@ -3,8 +3,10 @@ package com.umc.NewTine.controller;
 import com.umc.NewTine.config.JwtTokenProvider;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.LoginRequestDto;
+import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import com.umc.NewTine.dto.response.LoginResponseDto;
 import com.umc.NewTine.dto.request.SignupRequestDto;
+import com.umc.NewTine.dto.response.UserUpdateResponseDto;
 import com.umc.NewTine.repository.UserRepository;
 import com.umc.NewTine.service.MailService;
 import com.umc.NewTine.service.UserService;
@@ -71,6 +73,11 @@ public class UserController {
         String code = mailService.sendSimpleMessage(email);
         System.out.println("인증코드 : " + code);
         return code;
+    }
+
+    @PatchMapping("/{userId}")
+    public UserUpdateResponseDto updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequestDto updateRequestDto){
+        return userService.updateUser(userId, updateRequestDto);
     }
 
 }
