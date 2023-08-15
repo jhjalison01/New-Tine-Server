@@ -1,19 +1,16 @@
 package com.umc.NewTine.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-
+@AllArgsConstructor
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name="comment")
 public class Comment extends BaseTimeEntity{
-    @Id
+    @Id@Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -21,24 +18,31 @@ public class Comment extends BaseTimeEntity{
     private String content;
 
     @Column
-    private int like;
+    private int likes;
 
     @JoinColumn(name="news_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private News news;
 
+    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+
+    @Builder
+    public Comment(String content, int likes, News news, User user) {
+        this.content = content;
+        this.likes = likes;
+        this.news = news;
+        this.user = user;
+    }
+
+
     public void setLike(){
-        this.like = 0;
+        this.likes = 0;
     }
 
     public void updateLike(){
-        this.like++;
-    }
-
-    @Builder
-    public Comment(String content, int like, News news) {
-        this.content = content;
-        this.like = like;
-        this.news = news;
+        this.likes++;
     }
 }

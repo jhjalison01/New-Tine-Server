@@ -1,22 +1,21 @@
 package com.umc.NewTine.dto.response;
 
 import com.umc.NewTine.domain.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class UserUpdateResponseDto {
+public class UserDetailResponseDto {
+
     private Long userId;
     private String nickname;
+    private String email;
     private String interest;
+    private String image;
 
-    private String message;
 
-    public UserUpdateResponseDto(User user, String message) {
+    public UserDetailResponseDto(User user) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
+        this.email = user.getEmail();
         this.interest = user.getInterest();
-        this.message= message ;
+        this.image = user.getImage();
     }
 }

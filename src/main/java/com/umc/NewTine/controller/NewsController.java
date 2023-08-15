@@ -1,5 +1,6 @@
 package com.umc.NewTine.controller;
 
+import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.CommentRequestDto;
 import com.umc.NewTine.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.service.NewsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -131,9 +133,10 @@ public class NewsController {
 
     @PostMapping("/news/{newsId}/comments")
     public ResponseEntity<CommentResponseDto> addCommentToPost(
-            @PathVariable Long postId,
+            @AuthenticationPrincipal User user,
+            @PathVariable Long newsId,
             @RequestBody CommentRequestDto commentRequest) {
-        CommentResponseDto addedComment = commentService.addCommentToNews(postId, commentRequest);
+        CommentResponseDto addedComment = commentService.addCommentToNews(newsId, commentRequest, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedComment);
     }
 

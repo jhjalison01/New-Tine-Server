@@ -3,6 +3,8 @@ package com.umc.NewTine.service;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
+import com.umc.NewTine.dto.response.UserDetailResponseDto;
+import com.umc.NewTine.dto.response.UserResponseDto;
 import com.umc.NewTine.dto.response.UserUpdateResponseDto;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -88,5 +90,11 @@ public class UserService{
         return new UserUpdateResponseDto(userRepository.save(user), "정보가 수정되었습니다.");
     }
 
+
+    public UserDetailResponseDto getUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return new UserDetailResponseDto(user);
+    }
 
 }

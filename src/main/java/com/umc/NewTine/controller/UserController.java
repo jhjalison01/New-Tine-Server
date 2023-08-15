@@ -2,16 +2,20 @@ package com.umc.NewTine.controller;
 
 import com.umc.NewTine.config.JwtTokenProvider;
 import com.umc.NewTine.domain.User;
+import com.umc.NewTine.domain.UserPrincipal;
 import com.umc.NewTine.dto.request.LoginRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import com.umc.NewTine.dto.response.LoginResponseDto;
 import com.umc.NewTine.dto.request.SignupRequestDto;
+import com.umc.NewTine.dto.response.UserDetailResponseDto;
 import com.umc.NewTine.dto.response.UserUpdateResponseDto;
 import com.umc.NewTine.repository.UserRepository;
 import com.umc.NewTine.service.MailService;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto, Authentication authentication) {
         User user = userService.findUserByEmail(loginRequestDto.getEmail().trim());
 
         if (!userRepository.existsByEmail(loginRequestDto.getEmail().trim())) {
@@ -78,6 +82,11 @@ public class UserController {
     @PatchMapping("/{userId}")
     public UserUpdateResponseDto updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequestDto updateRequestDto){
         return userService.updateUser(userId, updateRequestDto);
+    }
+
+    @GetMapping("/{userId}")
+    public UserDetailResponseDto getUser(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return userService.getUser(userPrincipal.getId());
     }
 
 }

@@ -2,10 +2,12 @@ package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.Comment;
 import com.umc.NewTine.domain.News;
+import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.CommentRequestDto;
 import com.umc.NewTine.dto.response.CommentResponseDto;
 import com.umc.NewTine.repository.CommentRepository;
 import com.umc.NewTine.repository.NewsRepository;
+import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +22,15 @@ public class CommentService {
 
     private final NewsRepository newsRepository;
 
+    private final UserRepository userRepository;
+
     public List<CommentResponseDto> getCommnetsByNewsId(Long newsId, String orderBy){
         List<Comment> comments;
 
         if ("latest".equalsIgnoreCase(orderBy)) {
             comments = commentRepository.findByNewsIdOrderByCreatedAtDesc(newsId);
         } else if ("most-liked".equalsIgnoreCase(orderBy)) {
-            comments = commentRepository.findByNewsIdOrderByLikeDesc(newsId);
+            comments = commentRepository.findByNewsIdOrderByLikesDesc(newsId);
         } else {
             throw new IllegalArgumentException("Invalid orderBy parameter");
         }
@@ -39,11 +43,14 @@ public class CommentService {
         return commentDtos;
     }
 
-    public CommentResponseDto addCommentToNews(Long newsId, CommentRequestDto commentRequest) {
+    public CommentResponseDto addCommentToNews(Long newsId, CommentRequestDto commentRequest, Long userId) {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new EntityNotFoundException("News not found"));
 
-        Comment comment = commentRequest.toEntity(news);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Comment comment = commentRequest.toEntity(news, user);
         comment.setLike();
         Comment savedComment = commentRepository.save(comment);
 

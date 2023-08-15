@@ -14,10 +14,10 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name="user")
 public class User extends BaseTimeEntity{
-    @Id @Column(name = "user_id")
+    @Id @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -34,6 +34,9 @@ public class User extends BaseTimeEntity{
 
     @Column(columnDefinition = "TEXT")
     private String image;
+
+    @Column
+    private int point;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -61,12 +64,19 @@ public class User extends BaseTimeEntity{
         this.interest = interest;
         this.image = image;
         this.role = role;
+        this.point = 0;
         this.password = password;
         this.provider = provider;
         this.providerId = providerId;
     }
 
+    public void setPoint() {
+        this.point = 0;
+    }
 
+    public void updatePoint(){
+        this.point++;
+    }
 
     public User update(String nickname, String image){
         this.nickname = nickname;
