@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import com.sun.istack.NotNull;
 
@@ -51,6 +52,10 @@ public class News {
     @JoinColumn(name="pressId")
     private Press press;
     //추가-현정 끝
+
+    @OneToMany
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public News(Long id, String title, String content, long category_id, long press_id) {
         this.id = id;
