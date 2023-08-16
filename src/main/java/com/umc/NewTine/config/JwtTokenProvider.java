@@ -25,11 +25,12 @@ import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
+
 
 //    private final Key key;
 
@@ -179,8 +180,8 @@ public class JwtTokenProvider {
 //
 //        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 //    }
-
-    //토큰 정보를 검증하는 메서드
+//
+//    //토큰 정보를 검증하는 메서드
 //    public boolean validateToken(String token) {
 //        try {
 //            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -197,13 +198,13 @@ public class JwtTokenProvider {
 //        return false;
 //    }
 
-//    private Claims parseClaims(String accessToken) {
-//        try {
-//            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-//        } catch (ExpiredJwtException e) {
-//            return e.getClaims();
-//        }
-//    }
+    private Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(accessToken).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
 
 //    public String resolveToken(HttpServletRequest request) {
 //        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);

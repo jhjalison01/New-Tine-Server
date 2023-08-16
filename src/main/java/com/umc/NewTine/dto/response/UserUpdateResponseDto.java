@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 public class UserUpdateResponseDto {
     private Long userId;
     private String nickname;
-    private String interest;
 
     private String message;
+
 
     public UserUpdateResponseDto(User user, String message) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
-        this.interest = user.getInterest();
         this.message= message ;
     }
 }
