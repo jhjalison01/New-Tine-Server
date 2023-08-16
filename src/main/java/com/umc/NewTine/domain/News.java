@@ -5,13 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
+import java.time.LocalDateTime;
+import com.sun.istack.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
 @Table(name = "news")
-public class News extends BaseTimeEntity{
+public class News extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +29,11 @@ public class News extends BaseTimeEntity{
 
     private String image;
 
-    private String summary;
-
     private String subject;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pressId")
-    private Press press;    
+    @JoinColumn(name = "pressId")
+    private Press press;
 
     @NotNull
     @Column
@@ -40,18 +41,15 @@ public class News extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "news")
     private List<UserNewsHistory> userNewsHistories;
-  
+
     //추가-현정
     @Column(columnDefinition = "TEXT")
     private String summary;
-  
+
     @NotNull
     @Column
     private LocalDateTime createdAt;
-  
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pressId")
-    private Press press;
+
     //추가-현정 끝
 
     public News(Long id, String title, String content, Press press) {

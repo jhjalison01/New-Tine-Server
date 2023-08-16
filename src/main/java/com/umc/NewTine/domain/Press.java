@@ -1,10 +1,10 @@
 package com.umc.NewTine.domain;
 
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "press")
 public class Press extends BaseTimeEntity{
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +22,4 @@ public class Press extends BaseTimeEntity{
     private String image;
 
     private int subscriber;
-
 }

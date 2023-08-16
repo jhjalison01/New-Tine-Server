@@ -60,7 +60,6 @@ public class User extends BaseEntity{
         this.providerId = providerId;
     }
 
-
     public User update(String nickname, String image){
         this.nickname = nickname;
         this.image = image;
