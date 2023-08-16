@@ -17,7 +17,7 @@ import com.sun.istack.NotNull;
 @Getter
 @Entity
 @Table(name = "news")
-public class News extends BaseTimeEntity {
+public class News {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

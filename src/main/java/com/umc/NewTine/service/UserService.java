@@ -23,8 +23,8 @@ import javax.persistence.EntityNotFoundException;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    @Value("${upload.path}")
-    private String uploadPath;
+//    @Value("${upload.path}")
+//    private String uploadPath;
 
     @Transactional
     public ResponseEntity<Object> joinUser(SignupRequestDto signupRequestDto){
