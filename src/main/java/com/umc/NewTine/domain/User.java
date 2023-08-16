@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @AllArgsConstructor
 @Getter
 @Entity
@@ -72,6 +73,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.providerId = providerId;
         this.point = 0;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

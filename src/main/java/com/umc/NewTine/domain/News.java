@@ -1,22 +1,27 @@
 package com.umc.NewTine.domain;
 
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import java.util.List;
+import java.time.LocalDateTime;
 import com.sun.istack.NotNull;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "news")
-public class News {
+public class News extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long id;
 
     @NotNull
     @Column
@@ -25,13 +30,13 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-//    @NotNull
-//    @Column
-//    private long category_id;
+    private String image;
 
-//    @NotNull
-//    @Column
-//    private long press_id;
+    private String subject;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pressId")
+    private Press press;
 
     @NotNull
     @Column
@@ -39,28 +44,24 @@ public class News {
 
     @OneToMany(mappedBy = "news")
     private List<UserNewsHistory> userNewsHistories;
-  
+
     //추가-현정
     @Column(columnDefinition = "TEXT")
     private String summary;
-  
+
     @NotNull
     @Column
     private LocalDateTime createdAt;
-  
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pressId")
-    private Press press;
-    //추가-현정 끝
 
-//    @OneToMany
-//    private List<Comment> comments = new ArrayList<>();
+    //추가-현정 끝
 
     @Builder
     public News(Long id, String title, String content, Press press) {
         this.id = id;
         this.title = title;
         this.content = content;
+
+        this.press = press;
         this.views = 0;
         this.press = press;
     }

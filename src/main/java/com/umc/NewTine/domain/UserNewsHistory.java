@@ -1,6 +1,5 @@
 package com.umc.NewTine.domain;
 
-import com.sun.istack.NotNull;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;

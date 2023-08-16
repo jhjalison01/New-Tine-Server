@@ -4,6 +4,15 @@ import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.CommentRequestDto;
 import com.umc.NewTine.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import com.umc.NewTine.dto.response.BaseException;
+import com.umc.NewTine.dto.response.NewsDto;
+import com.umc.NewTine.dto.response.BaseResponse;
+import com.umc.NewTine.service.NewsService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.*;
@@ -17,6 +26,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
+@Slf4j
 public class NewsController {
 
     private final NewsService newsService;
@@ -24,13 +35,24 @@ public class NewsController {
     private final CommentService commentService;
 
 
+    @GetMapping("/news")  // 홈 화면 뉴스 조회하기
+    public BaseResponse<List<NewsDto>> getHomeNews() {
+
+        try {
+            return new BaseResponse<>(newsService.getHomeNews());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
     //개별 뉴스기사
     @GetMapping("news/{newsId}")
-    public BaseResponse<SingleNewsResponseDto>  getSingleNews(@PathVariable("newsId") Long newsId){
+    public BaseResponse<SingleNewsResponseDto> getSingleNews(@PathVariable("newsId") Long newsId) {
         //userId 수정하기
-        Long userId=1L;
+        Long userId = 1L;
         try {
-            return new BaseResponse<>(newsService.getSingleNewsById(userId,newsId));
+            return new BaseResponse<>(newsService.getSingleNewsById(userId, newsId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -66,6 +88,15 @@ public class NewsController {
         }
     }
 
+    @GetMapping("/news/{userId}/recommend") //추천 뉴스 조회
+    public BaseResponse<List<NewsRecommendResponse>> getRecommendNews(@PathVariable Long userId) {
+        try {
+            return new BaseResponse<>(newsService.getRecommendNews(userId));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @PostMapping("/news") //사용자-뉴스 기록 저장, viewCount 증가
     public BaseResponse<Void> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
         try {
@@ -81,12 +112,12 @@ public class NewsController {
 
     //스크랩한 뉴스 조회
     @GetMapping("/news/scrap")
-    public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(){
+    public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews() {
         //userId 수정하기
-        Long userId=1L;
-        try{
+        Long userId = 1L;
+        try {
             return new BaseResponse<>(newsService.getScrappedNews(userId));
-        } catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }
@@ -94,31 +125,31 @@ public class NewsController {
 
     //뉴스 스크랩하기
     @PostMapping("/news/scrap/{newsId}")
-    public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId){
+    public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId) {
         //userId 수정하기
-        Long userId=1L;
-        try{
-            if (newsService.saveNewsScrap(userId,newsId)){
-                return new BaseResponse<>(true,HttpStatus.OK.value(),"Success");
-            } else{
-                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+        Long userId = 1L;
+        try {
+            if (newsService.saveNewsScrap(userId, newsId)) {
+                return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
+            } else {
+                return new BaseResponse<>(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fail");
             }
-        } catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }
 
     //뉴스기사 스크랩 취소하기
     @DeleteMapping("/news/scrap/{newsId}")
-    public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId){
+    public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId) {
         Long userId = 1L; // 사용자 ID 수정하기
         try {
             if (newsService.deleteNewsScrap(userId, newsId)) {
-                return new BaseResponse<>(true,HttpStatus.OK.value(),"Success");
-            } else{
-                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+                return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
+            } else {
+                return new BaseResponse<>(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fail");
             }
-        } catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }

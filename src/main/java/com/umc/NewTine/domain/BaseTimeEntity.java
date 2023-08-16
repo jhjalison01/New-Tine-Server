@@ -23,3 +23,4 @@ public class BaseTimeEntity {
     @LastModifiedDate
     private Timestamp modifiedAt;
 }
+

@@ -6,7 +6,7 @@ public class NewsRecentResponse {
 
     private long id;
     private String title;
-    private long press_id;
+    private long pressId;
 
     public long getId() {
         return id;
@@ -16,21 +16,21 @@ public class NewsRecentResponse {
         return title;
     }
 
-    public long getPress_id() {
-        return press_id;
+    public long getPressId() {
+        return pressId;
     }
 
 
     public NewsRecentResponse(News news) {
         this.id = news.getId();
         this.title = news.getTitle();
-        this.press_id = news.getPress().getId();
+        this.pressId = news.getPress().getId();
 
     }
 
-    public NewsRecentResponse(long id, String title, long press_id) {
+    public NewsRecentResponse(long id, String title, long pressId) {
         this.id = id;
         this.title = title;
-        this.press_id = press_id;
+        this.pressId = pressId;
     }
 }

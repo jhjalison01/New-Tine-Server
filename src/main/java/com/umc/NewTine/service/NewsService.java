@@ -3,20 +3,29 @@ package com.umc.NewTine.service;
 import com.umc.NewTine.domain.*;
 import com.umc.NewTine.repository.*;
 import com.umc.NewTine.dto.response.*;
-import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_NEWS_YET;
-import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
+import com.umc.NewTine.domain.News;
+import com.umc.NewTine.dto.response.BaseException;
+import com.umc.NewTine.dto.response.NewsDto;
 import com.umc.NewTine.dto.request.NewsRecentRequest;
 import javax.persistence.EntityNotFoundException;
+
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_NEWS_YET;
+import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class NewsService {
     private final NewsRepository newsRepository;
     private final NewsScrapRepository newsScrapRepository;
@@ -26,24 +35,22 @@ public class NewsService {
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
 
+    @Transactional(readOnly = true)
+    public List<NewsDto> getHomeNews() throws BaseException {
+        List<News> allNews = newsRepository.findNews().get();
 
-    @Autowired
-    public NewsService(NewsRepository newsRepository,PressSubscriptionRepository pressSubscriptionRepository,
-                       NewsScrapRepository newsScrapRepository, NewsCategoryRepository newsCategoryRepository,
-                       NewsAndCategoryRepository newsAndCategoryRepository, UserRepository userRepository,
-                       UserNewsHistoryRepository userNewsHistoryRepository) {
-        this.newsRepository=newsRepository;
-        this.pressSubscriptionRepository=pressSubscriptionRepository;
-        this.newsScrapRepository=newsScrapRepository;
-        this.newsCategoryRepository=newsCategoryRepository;
-        this.newsAndCategoryRepository=newsAndCategoryRepository;
-        this.userRepository = userRepository;
-        this.userNewsHistoryRepository = userNewsHistoryRepository;
+        if (allNews.isEmpty()) {
+            throw new BaseException(NO_NEWS_YET);
+        } else {
+            return allNews.stream()
+                    .map(news -> NewsDto.from(news, news.getPress()))
+                    .collect(Collectors.toList());
+        }
     }
 
 
     @Transactional
-    public SingleNewsResponseDto getSingleNewsById(Long userId,Long newsId) throws BaseException {
+    public SingleNewsResponseDto getSingleNewsById(Long userId, Long newsId) throws BaseException {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
 
@@ -73,12 +80,13 @@ public class NewsService {
     @Transactional
     public List<ScrapNewsResponseDto> getScrappedNews(Long userId) throws BaseException {
 
-        List<NewsScrap> newsScrapList=newsScrapRepository.findAllByUserId(userId);
+        List<NewsScrap> newsScrapList = newsScrapRepository.findAllByUserId(userId);
 
         return newsScrapList.stream()
                 .map(this::mapNewsScrapToResponseDto)
                 .collect(Collectors.toList());
     }
+
     //뉴스 제목, 생성 날짜, 언론사 이름 매핑
     private ScrapNewsResponseDto mapNewsScrapToResponseDto(NewsScrap newsScrap) {
         News news = newsScrap.getNews();
@@ -92,7 +100,7 @@ public class NewsService {
 
     //newsScrap 저장
     @Transactional
-    public boolean saveNewsScrap(Long userId,Long newsId) throws BaseException{
+    public boolean saveNewsScrap(Long userId, Long newsId) throws BaseException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
@@ -110,7 +118,7 @@ public class NewsService {
 
     //newsScrap 삭제
     @Transactional
-    public boolean deleteNewsScrap(Long userId, Long newsId) throws BaseException{
+    public boolean deleteNewsScrap(Long userId, Long newsId) throws BaseException {
         NewsScrap newsScrap = newsScrapRepository.findByUserIdAndNewsId(userId, newsId)
                 .orElseThrow(() -> new EntityNotFoundException("NewsScrap not found"));
 
@@ -123,7 +131,7 @@ public class NewsService {
     public List<NewsRecentResponse> getRecentNews(Long userId) throws BaseException {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new BaseException(NO_USER_ID));
+                .orElseThrow(() -> new BaseException(NO_USER_ID));
         List<News> newsList = userNewsHistoryRepository.findNewsByUserOrderByRecentViewTimeDesc(user)
                 .orElse(List.of());
         return newsList.stream()
@@ -133,7 +141,7 @@ public class NewsService {
     }
 
     @Transactional// 인기 뉴스 조회
-    public List<NewsRankingResponse> getRankingNews() throws BaseException{
+    public List<NewsRankingResponse> getRankingNews() throws BaseException {
         List<News> newsList = newsRepository.findAllByOrderByViewsDesc()
                 .orElse(List.of());
         return newsList.stream()
@@ -152,13 +160,26 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional //추천 뉴스 조회
+    public List<NewsRecommendResponse> getRecommendNews(Long userId) throws BaseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(NO_USER_ID));
+        List<News> newsList = newsAndCategoryRepository.findNewsByUserInterest(userId)
+                .orElse(List.of());
+        Collections.shuffle(newsList); //랜덤하게 4개 추천
+        return newsList.stream()
+                .map(NewsRecommendResponse::new)
+                .limit(4)
+                .collect(Collectors.toList());
+    }
+
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
-    public boolean saveRecentViewTime(NewsRecentRequest request) throws BaseException{
+    public boolean saveRecentViewTime(NewsRecentRequest request) throws BaseException {
 
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(()->new BaseException(NO_USER_ID));
+                .orElseThrow(() -> new BaseException(NO_USER_ID));
         News news = newsRepository.findById(request.getNewsId())
-                .orElseThrow(()->new BaseException(NO_NEWS_YET));
+                .orElseThrow(() -> new BaseException(NO_NEWS_YET));
         LocalDateTime recentViewTime = LocalDateTime.now();
         boolean isDuplicate = userNewsHistoryRepository.existsByUserAndNewsAndRecentViewTimeBetween(user, news, recentViewTime.minusMinutes(1), recentViewTime);
 
@@ -174,6 +195,4 @@ public class NewsService {
         return true;
     }
 
-
 }
-
