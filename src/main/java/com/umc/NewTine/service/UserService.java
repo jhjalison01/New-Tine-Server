@@ -2,23 +2,30 @@ package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.SignupRequestDto;
+import com.umc.NewTine.dto.request.UserUpdateRequestDto;
+import com.umc.NewTine.dto.response.UserDetailResponseDto;
+import com.umc.NewTine.dto.response.UserUpdateResponseDto;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
-public class UserService{
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-//    private final JavaMailSender javaMailSender;
-//
-//    @Value("${spring.mail.username}")
-//    private String sender;
 
-//    private static final String FROM_ADDRESS = "bje5774@gmail.com";
+    @Value("${upload.path}")
+    private String uploadPath;
+
     @Transactional
     public ResponseEntity<Object> joinUser(SignupRequestDto signupRequestDto){
 
@@ -68,21 +75,27 @@ public class UserService{
         return userRepository.existsByEmail(signupRequestDto.getEmail());
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        return userRepository.findByEmail(email)
-//                .orElseThrow(() -> new UsernameNotFoundException("등록되지 않은 사용자입니다."));
-//
-//    }
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("등록되지 않은 사용자입니다."));
 
-//    @Transactional
-//    public UserUpdateResponseDto updateUser(Long userId, UserUpdateRequestDto updateRequestDto){
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-//        user.update(updateRequestDto);
-//
-//        return new UserUpdateResponseDto(userRepository.save(user), "정보가 수정되었습니다.");
-//    }
+    }
 
+    @Transactional
+    public UserUpdateResponseDto updateUser(Long userId, UserUpdateRequestDto updateRequestDto){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.updateUser(updateRequestDto);
+
+        return new UserUpdateResponseDto(userRepository.save(user), "정보가 수정되었습니다.");
+    }
+
+
+    public UserDetailResponseDto getUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return new UserDetailResponseDto(user);
+    }
 
 }

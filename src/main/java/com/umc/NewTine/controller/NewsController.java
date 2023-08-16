@@ -1,5 +1,9 @@
 package com.umc.NewTine.controller;
 
+import com.umc.NewTine.domain.User;
+import com.umc.NewTine.dto.request.CommentRequestDto;
+import com.umc.NewTine.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewsDto;
 import com.umc.NewTine.dto.response.BaseResponse;
@@ -14,16 +18,21 @@ import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.service.NewsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class NewsController {
 
     private final NewsService newsService;
+
+    private final CommentService commentService;
 
 
     @GetMapping("/news")  // 홈 화면 뉴스 조회하기
@@ -35,6 +44,7 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
 
     //개별 뉴스기사
     @GetMapping("news/{newsId}")
@@ -143,4 +153,29 @@ public class NewsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @GetMapping("/news/{newsId}/comments")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(
+            @PathVariable Long newsId,
+            @RequestParam(required = false) String orderBy) {
+        List<CommentResponseDto> commentDTOs = commentService.getCommnetsByNewsId(newsId, orderBy);
+        return ResponseEntity.ok(commentDTOs);
+    }
+
+    @PostMapping("/news/{newsId}/comments")
+    public ResponseEntity<CommentResponseDto> addCommentToPost(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long newsId,
+            @RequestBody CommentRequestDto commentRequest) {
+        CommentResponseDto addedComment = commentService.addCommentToNews(newsId, commentRequest, user.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedComment);
+    }
+
+    @PatchMapping("news/comments/{commentId}")
+    public ResponseEntity<CommentResponseDto> likeComment(@PathVariable Long commentId) {
+        CommentResponseDto likedComment = commentService.likeComment(commentId);
+        return ResponseEntity.ok(likedComment);
+    }
+
+
 }

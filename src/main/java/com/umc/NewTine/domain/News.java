@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import java.util.List;
 import java.time.LocalDateTime;
 import com.sun.istack.NotNull;
@@ -52,12 +55,15 @@ public class News extends BaseTimeEntity {
 
     //추가-현정 끝
 
+    @Builder
     public News(Long id, String title, String content, Press press) {
         this.id = id;
         this.title = title;
         this.content = content;
+
         this.press = press;
         this.views = 0;
+        this.press = press;
     }
 
     public Long getId() {
