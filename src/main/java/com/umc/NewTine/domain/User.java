@@ -1,20 +1,13 @@
 package com.umc.NewTine.domain;
 
-<<<<<<< HEAD
-=======
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import com.umc.NewTine.config.Role;
 import lombok.AccessLevel;
->>>>>>> origin/feature/#17-set-habit
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
-import com.umc.NewTine.config.Role;
-import lombok.AccessLevel;
 import java.util.List;
 
 
@@ -56,8 +49,6 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user")
     private List<UserNewsHistory> userNewsHistories;
 
-<<<<<<< HEAD
-=======
     @Builder
     public User(String nickname, String email, String image, Role role, String password, String provider, String providerId) {
         this.nickname = nickname;
@@ -68,8 +59,6 @@ public class User extends BaseEntity{
         this.provider = provider;
         this.providerId = providerId;
     }
-
->>>>>>> origin/feature/#17-set-habit
 
     public User update(String nickname, String image){
         this.nickname = nickname;
