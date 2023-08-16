@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
 
     public User findUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
-                            return new IllegalArgumentException("User를 찾을 수 없습니다.");
+            return new IllegalArgumentException("User를 찾을 수 없습니다.");
         });
 
         return user;
