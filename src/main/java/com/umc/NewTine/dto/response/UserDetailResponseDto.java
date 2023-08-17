@@ -16,7 +16,6 @@ public class UserDetailResponseDto {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
-        this.interest = user.getInterest();
-        this.image = user.getImage();
+
     }
 }

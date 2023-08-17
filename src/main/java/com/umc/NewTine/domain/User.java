@@ -32,14 +32,14 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String nickname;
 
     @Column
-    private String email;
+    private String name;
 
     @Column
-    private String interest;
+    private String email;
 
 
-    @Column(columnDefinition = "TEXT")
-    private String image;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Image image;
 
     @Column
     private int point;
@@ -63,10 +63,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     private List<UserNewsHistory> userNewsHistories;
 
     @Builder
-    public User(String nickname, String email, String image, Role role, String password, String provider, String providerId, int point) {
+    public User(String nickname, String email, String name, String password, String provider, String providerId) {
         this.nickname = nickname;
         this.email = email;
-        this.image = image;
+        this.name = name;
         this.role = Role.USER;
         this.password = password;
         this.provider = provider;
@@ -120,15 +120,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     public User update(String nickname, String image){
         this.nickname = nickname;
-        this.image = image;
 
         return this;
     }
 
     public void updateUser(UserUpdateRequestDto userUpdateRequestDto){
         this.nickname = userUpdateRequestDto.getNickname();
-        this.image = userUpdateRequestDto.getImage();
-        this.interest = userUpdateRequestDto.getInterest();
     }
 
     public Long getId() {
