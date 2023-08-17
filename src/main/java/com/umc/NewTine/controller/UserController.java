@@ -79,7 +79,7 @@ public class UserController {
 //        RefreshTokenResponseDto refreshTokenResponseDto = tokenService.refreshToken(email, refreshToken);
 //        return refreshTokenResponseDto;
 //    }
-    @PostMapping("login/mailConfirm")
+    @GetMapping("login/mailConfirm")
     @ResponseBody
     String mailConfirm(@RequestParam("email") String email) throws Exception {
 
