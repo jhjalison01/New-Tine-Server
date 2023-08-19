@@ -83,9 +83,9 @@ public class UserController {
         return code;
     }
 
-    @PatchMapping("/{userId}")
-    public UserUpdateResponseDto updateUser(@PathVariable Long userId, @ModelAttribute  UserUpdateRequestDto updateRequestDto){
-        return userService.updateUser(userId, updateRequestDto);
+    @PatchMapping("/update")
+    public UserUpdateResponseDto updateUser(@RequestBody UserUpdateRequestDto updateRequestDto, @AuthenticationPrincipal User user){
+        return userService.updateUser(user.getId(), updateRequestDto);
     }
 
     @GetMapping("/info")
@@ -95,10 +95,10 @@ public class UserController {
     }
 
     @PostMapping("/image")
-    public String upload(@ModelAttribute ImageRequestDto imageRequestDto, @AuthenticationPrincipal User user) {
+    public Long upload(@ModelAttribute ImageRequestDto imageRequestDto, @AuthenticationPrincipal User user) {
         imageService.upload(imageRequestDto, user.getEmail());
 
-        return "redirect:user/info";
+        return user.getId();
     }
 
 }

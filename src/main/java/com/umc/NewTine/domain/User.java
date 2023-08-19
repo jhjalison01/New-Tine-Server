@@ -126,6 +126,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     public void updateUser(UserUpdateRequestDto userUpdateRequestDto){
         this.nickname = userUpdateRequestDto.getNickname();
+        this.name = userUpdateRequestDto.getName();
     }
 
     public Long getId() {
