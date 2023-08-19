@@ -173,6 +173,14 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public NewTechInfoResponse getNewTechInfo(Long userId) throws BaseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new BaseException(NO_USER_ID));
+
+        return new NewTechInfoResponse(userNewsHistoryRepository.countTodayNewsViews(user), userNewsHistoryRepository.timeSpentByUserToday(user));
+    }
+
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
     public boolean saveRecentViewTime(NewsRecentRequest request) throws BaseException {
 
