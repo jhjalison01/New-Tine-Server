@@ -97,9 +97,9 @@ public class NewsController {
     }
 
     @GetMapping("/newtech/{userId}") //뉴테크 페이지 조회
-    public BaseResponse<NewTechInfoResponse> getNewTechInfo(@AuthenticationPrincipal User user) {
+    public BaseResponse<NewTechInfoResponse> getNewTechInfo(@PathVariable Long userId) {
         try {
-            return new BaseResponse<>(newsService.getNewTechInfo(user.getId()));
+            return new BaseResponse<>(newsService.getNewTechInfo(userId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
