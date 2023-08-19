@@ -18,6 +18,13 @@ public interface UserNewsHistoryRepository extends JpaRepository<UserNewsHistory
     Optional<UserNewsHistory> findByUserAndNews(User user, News news);
 
     boolean existsByUserAndNewsAndRecentViewTimeBetween(User user, News news, LocalDateTime oneMinute, LocalDateTime recentViewTime);
+    
 
+    // 오늘 사용자가 머문 시간 총합을 계산하는 쿼리
+    @Query("SELECT SUM(TIME_TO_SEC(TIMEDIFF(u.recentViewExitTime, u.recentViewTime)) / 60) " +
+            "FROM UserNewsHistory u " +
+            "WHERE u.user = :user " +
+            "AND DATE(u.recentViewTime) = CURRENT_DATE")
+    int timeSpentByUserToday(@Param("user") User user);
 
 }
