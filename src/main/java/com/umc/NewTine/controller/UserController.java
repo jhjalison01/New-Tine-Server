@@ -6,16 +6,14 @@ import com.umc.NewTine.domain.UserPrincipal;
 import com.umc.NewTine.dto.request.ImageRequestDto;
 import com.umc.NewTine.dto.request.LoginRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
-import com.umc.NewTine.dto.response.LoginResponseDto;
+import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.dto.request.SignupRequestDto;
-import com.umc.NewTine.dto.response.UserDetailResponseDto;
-import com.umc.NewTine.dto.response.UserResponseDto;
-import com.umc.NewTine.dto.response.UserUpdateResponseDto;
 import com.umc.NewTine.repository.UserRepository;
 import com.umc.NewTine.service.ImageService;
 import com.umc.NewTine.service.MailService;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -99,6 +97,15 @@ public class UserController {
         imageService.upload(imageRequestDto, user.getEmail());
 
         return user.getId();
+    }
+
+    @GetMapping("/interest")
+    public BaseResponse<Void> updateUserInterest(@RequestParam("category") String category, @AuthenticationPrincipal User user){
+        if (userService.updateUserInterest(category, user.getId())){
+            return new BaseResponse<>(true, HttpStatus.OK.value(),"Success");
+        } else{
+            return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+        }
     }
 
 }

@@ -1,9 +1,14 @@
 package com.umc.NewTine.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+@AllArgsConstructor
+@Builder
+@Getter
 @NoArgsConstructor
 @Entity
 public class UserInterest {

@@ -62,6 +62,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<UserNewsHistory> userNewsHistories;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserInterest> userInterests = new ArrayList<>();
+
     @Builder
     public User(String nickname, String email, String name, String password, String provider, String providerId) {
         this.nickname = nickname;
