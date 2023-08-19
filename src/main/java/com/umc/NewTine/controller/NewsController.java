@@ -96,6 +96,15 @@ public class NewsController {
         }
     }
 
+    @GetMapping("/newtech/{userId}") //뉴테크 페이지 조회
+    public BaseResponse<NewTechInfoResponse> getNewTechInfo(@AuthenticationPrincipal User user) {
+        try {
+            return new BaseResponse<>(newsService.getNewTechInfo(user.getId()));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @PostMapping("/news") //사용자-뉴스 기록 저장, viewCount 증가
     public BaseResponse<Void> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
         try {
