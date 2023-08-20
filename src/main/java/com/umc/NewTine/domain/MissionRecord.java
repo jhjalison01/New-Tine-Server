@@ -13,17 +13,14 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Entity
-@Table(name = "mission")
-public class Mission {
+@Table(name = "mission_Record")
+public class MissionRecord extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "success_at")
-    private LocalDateTime successAt;
-
-    @Column
-    private int type;
+    @Column(name="mission_id")
+    private int missionId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
