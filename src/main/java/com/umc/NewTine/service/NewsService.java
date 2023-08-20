@@ -202,6 +202,15 @@ public class NewsService {
         userNewsHistory.setRecentViewTime(recentViewTime);
         userNewsHistoryRepository.save(userNewsHistory);
 
+        if (userNewsHistoryRepository.countTodayNewsViews(user) == 3) {
+            //미션테이블기록
+            //미션기록 반환
+
+
+        }
+
+
+
         return true;
     }
 }

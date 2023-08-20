@@ -9,7 +9,7 @@ import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.repository.UserRepository;
-import com.umc.NewTine.service.ImageService;
+//import com.umc.NewTine.service.ImageService;
 import com.umc.NewTine.service.MailService;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final ImageService imageService;
+//    private final ImageService imageService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -92,12 +92,12 @@ public class UserController {
         return userService.getUser(user.getId());
     }
 
-    @PostMapping("/image")
-    public Long upload(@ModelAttribute ImageRequestDto imageRequestDto, @AuthenticationPrincipal User user) {
-        imageService.upload(imageRequestDto, user.getEmail());
-
-        return user.getId();
-    }
+//    @PostMapping("/image")
+//    public Long upload(@ModelAttribute ImageRequestDto imageRequestDto, @AuthenticationPrincipal User user) {
+//        imageService.upload(imageRequestDto, user.getEmail());
+//
+//        return user.getId();
+//    }
 
     @GetMapping("/interest")
     public BaseResponse<Void> updateUserInterest(@RequestParam("category") String category, @AuthenticationPrincipal User user){
