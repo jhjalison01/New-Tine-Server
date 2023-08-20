@@ -1,0 +1,30 @@
+package com.umc.NewTine.controller;
+
+import com.umc.NewTine.dto.response.BaseException;
+import com.umc.NewTine.dto.response.BaseResponse;
+import com.umc.NewTine.service.MyTechService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@Slf4j
+public class MyTechController {
+    private final MyTechService myTechService;
+
+    @GetMapping("/mytech/habit/calendar")
+    public BaseResponse<List<Integer>> getAchieveCalendar(/*@AuthenticationPrincipal User user,*/ @RequestParam("year") int year, @RequestParam("month") int month){
+        try {
+            //Long userId=user.getId();
+            Long userId=1L;
+            return new BaseResponse<>(myTechService.getAchieveCalendar(userId,year,month));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+}
