@@ -113,8 +113,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     }
 
 
-    public void setPoint() {
-        this.point = 0;
+    public void setPoint(int point) {
+        this.point = point;
     }
 
     public void updatePoint(){
@@ -130,6 +130,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     public void updateUser(UserUpdateRequestDto userUpdateRequestDto){
         this.nickname = userUpdateRequestDto.getNickname();
         this.name = userUpdateRequestDto.getName();
+        this.point = this.point + userUpdateRequestDto.getPoint();
     }
 
     public Long getId() {

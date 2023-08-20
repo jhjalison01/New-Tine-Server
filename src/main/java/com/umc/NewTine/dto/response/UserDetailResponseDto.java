@@ -19,7 +19,7 @@ public class UserDetailResponseDto {
     private String email;
     private String name;
     private String imageUrl;
-
+    private int point;
     private List<UserInterestResponseDto> userInterests;
 
 
@@ -28,6 +28,7 @@ public class UserDetailResponseDto {
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.name = user.getName();
+        this.point = user.getPoint();
         this.imageUrl = user.getImage().getUrl();
         this.userInterests = user.getUserInterests().stream().map(h -> new UserInterestResponseDto(h)).collect(Collectors.toList());
     }

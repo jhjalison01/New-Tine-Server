@@ -11,7 +11,6 @@ import com.umc.NewTine.repository.NewsCategoryRepository;
 import com.umc.NewTine.repository.UserInterestRepository;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -118,6 +116,14 @@ public class UserService implements UserDetailsService {
                                                     .build();
             userInterestRepository.save(userInterest);
         }
+        return true;
+    }
+
+    public Boolean updateUserPoint(int point, Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setPoint(point);
+        userRepository.save(user);
         return true;
     }
 
