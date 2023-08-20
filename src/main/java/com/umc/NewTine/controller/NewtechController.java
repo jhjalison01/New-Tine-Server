@@ -1,15 +1,12 @@
 package com.umc.NewTine.controller;
 
 import com.umc.NewTine.domain.User;
-import com.umc.NewTine.dto.*;
+import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.service.NewtechService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.umc.NewTine.service.NewsService;
 
 import java.util.List;
