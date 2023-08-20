@@ -10,13 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserUpdateRequestDto {
     private String nickname;
-    private String image;
-    private String interest;
+    private String name;
 
     @Builder
     public UserUpdateRequestDto(User user) {
         this.nickname = user.getNickname();
-        this.image = user.getImage();
-        this.interest = user.getInterest();
+        this.name = user.getName();
     }
 }

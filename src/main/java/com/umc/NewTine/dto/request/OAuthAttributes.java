@@ -54,9 +54,7 @@ public class OAuthAttributes {
     public User toEntity() {
         User user = User.builder()
                 .nickname(nickname)
-                .image(image)
                 .email(email)
-                .role(Role.USER)
                 .provider(provider)
                 .providerId(String.valueOf(attributes.get(nameAttributeKey)))
                 .build();

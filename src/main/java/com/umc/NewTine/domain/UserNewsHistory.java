@@ -24,16 +24,17 @@ public class UserNewsHistory {
     @Column
     private LocalDateTime recentViewTime;
 
-    public UserNewsHistory(User user, News news, LocalDateTime recentViewTime) {
+    @Column
+    private LocalDateTime recentViewExitTime;
+
+    public UserNewsHistory(User user, News news, LocalDateTime recentViewTime, LocalDateTime recentViewExitTime) {
         this.user = user;
         this.news = news;
         this.recentViewTime = recentViewTime;
+        this.recentViewExitTime = recentViewExitTime;
     }
 
     public void setRecentViewTime(LocalDateTime recentViewTime) {
         this.recentViewTime = recentViewTime;
     }
 }
-
-
-
