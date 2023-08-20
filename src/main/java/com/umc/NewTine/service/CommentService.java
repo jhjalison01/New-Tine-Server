@@ -51,7 +51,6 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Comment comment = commentRequest.toEntity(news, user);
-        comment.setLike();
         Comment savedComment = commentRepository.save(comment);
 
         return new CommentResponseDto(savedComment);
