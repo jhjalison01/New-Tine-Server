@@ -54,7 +54,8 @@ public class NewsService {
     public SingleNewsResponseDto getSingleNewsById(Long userId, Long newsId) throws BaseException {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
-
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Press press = news.getPress();
         boolean scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
         boolean subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
@@ -63,6 +64,13 @@ public class NewsService {
         List<String> category = newsAndCategoryList.stream()
                 .map(data -> newsCategoryRepository.getById(data.getNewsCategory().getId()).getName())
                 .collect(Collectors.toList());
+
+        if (!missionRecordRepository.existsByUserAndMissionId(user, 1)) {
+            missionRecordRepository.save(new MissionRecord(user, 1));
+            missionRecordRepository.findSuccessDailyMissionByUser(user);
+        }
+
+
 
         return SingleNewsResponseDto.builder()
                 .title(news.getTitle())
@@ -74,6 +82,7 @@ public class NewsService {
                 .subscribed(subscribed)
                 .scrapped(scrapped)
                 .category(category)
+                .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
                 .build();
     }
 
@@ -174,13 +183,6 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public NewTechInfoResponse getNewTechInfo(Long userId) throws BaseException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()->new BaseException(NO_USER_ID));
-
-        return new NewTechInfoResponse(userNewsHistoryRepository.countTodayNewsViews(user), userNewsHistoryRepository.timeSpentByUserToday(user));
-    }
 
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
     public List<String> saveRecentViewTime(NewsRecentRequest request) throws BaseException {
