@@ -12,5 +12,9 @@ public interface MissionRecordRepository extends JpaRepository<MissionRecord, Lo
 
     @Query("SELECT DISTINCT m.name FROM MissionRecord r INNER JOIN Mission m ON r.mission_id = m.id WHERE r.user = :user AND DATE(r.createdAt) = CURRENT_DATE ")
     List<String> findSuccessDailyMissionByUser(@Param("user") User user);
+
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM MissionRecord r WHERE r.user = :user AND r.mission_id = :missionId AND DATE(r.createdAt) = CURRENT_DATE")
+    boolean existsByUserAndMissionId(@Param("user") User user, @Param("missionId") int missionId);
+
 }
 

@@ -1,17 +1,20 @@
 package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.Comment;
+import com.umc.NewTine.domain.MissionRecord;
 import com.umc.NewTine.domain.News;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.dto.request.CommentRequestDto;
 import com.umc.NewTine.dto.response.CommentResponseDto;
 import com.umc.NewTine.repository.CommentRepository;
+import com.umc.NewTine.repository.MissionRecordRepository;
 import com.umc.NewTine.repository.NewsRepository;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,8 @@ public class CommentService {
     private final NewsRepository newsRepository;
 
     private final UserRepository userRepository;
+
+    private final MissionRecordRepository missionRecordRepository;
 
     public List<CommentResponseDto> getCommnetsByNewsId(Long newsId, String orderBy){
         List<Comment> comments;
@@ -53,7 +58,13 @@ public class CommentService {
         Comment comment = commentRequest.toEntity(news, user);
         Comment savedComment = commentRepository.save(comment);
 
-        return new CommentResponseDto(savedComment);
+        if (!missionRecordRepository.existsByUserAndMissionId(user, 3)) {
+            missionRecordRepository.save(new MissionRecord(user, 3));
+            missionRecordRepository.findSuccessDailyMissionByUser(user);
+            return new CommentResponseDto(savedComment, missionRecordRepository.findSuccessDailyMissionByUser(user));
+        }
+
+        return new CommentResponseDto(savedComment, Collections.emptyList());
     }
 
     public CommentResponseDto likeComment(Long commentId) {
