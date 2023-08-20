@@ -34,6 +34,7 @@ public class NewsService {
     private final NewsAndCategoryRepository newsAndCategoryRepository;
     private final UserRepository userRepository;
     private final UserNewsHistoryRepository userNewsHistoryRepository;
+    private final MissionRecordRepository missionRecordRepository;
 
     @Transactional(readOnly = true)
     public List<NewsDto> getHomeNews() throws BaseException {
@@ -182,7 +183,7 @@ public class NewsService {
     }
 
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
-    public boolean saveRecentViewTime(NewsRecentRequest request) throws BaseException {
+    public List<String> saveRecentViewTime(NewsRecentRequest request) throws BaseException {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
@@ -202,15 +203,18 @@ public class NewsService {
         userNewsHistory.setRecentViewTime(recentViewTime);
         userNewsHistoryRepository.save(userNewsHistory);
 
+
         if (userNewsHistoryRepository.countTodayNewsViews(user) == 3) {
             //미션테이블기록
+            missionRecordRepository.save(new MissionRecord(user,2));
             //미션기록 반환
-
+            return missionRecordRepository.findSuccessDailyMissionByUser(user);
 
         }
 
 
 
-        return true;
+
+        return Collections.emptyList();
     }
 }

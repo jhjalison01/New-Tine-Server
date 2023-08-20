@@ -89,13 +89,9 @@ public class NewsController {
 
 
     @PostMapping("/news") //사용자-뉴스 기록 저장, viewCount 증가
-    public BaseResponse<Void> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
+    public BaseResponse<List<String>> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
         try {
-            if (newsService.saveRecentViewTime(request)) {
-                return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
-            } else {
-                return new BaseResponse<>(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Fail");
-            }
+            return new BaseResponse<>(newsService.saveRecentViewTime(request));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
