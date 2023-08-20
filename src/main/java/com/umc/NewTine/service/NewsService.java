@@ -55,8 +55,13 @@ public class NewsService {
                 .orElseThrow(() -> new EntityNotFoundException("News not found with ID: " + newsId));
 
         Press press = news.getPress();
-        boolean scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
-        boolean subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
+        boolean scrapped = false;
+        boolean subscribed = false;
+
+        if(userId!=null){
+            scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
+            subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
+        }
 
         List<NewsAndCategory> newsAndCategoryList = newsAndCategoryRepository.findByNewsId(newsId);
         List<String> category = newsAndCategoryList.stream()
