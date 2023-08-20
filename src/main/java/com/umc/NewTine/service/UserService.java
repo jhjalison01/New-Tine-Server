@@ -1,13 +1,16 @@
 package com.umc.NewTine.service;
 
+import com.umc.NewTine.domain.NewsCategory;
 import com.umc.NewTine.domain.User;
+import com.umc.NewTine.domain.UserInterest;
 import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import com.umc.NewTine.dto.response.UserDetailResponseDto;
 import com.umc.NewTine.dto.response.UserUpdateResponseDto;
+import com.umc.NewTine.repository.NewsCategoryRepository;
+import com.umc.NewTine.repository.UserInterestRepository;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +25,9 @@ import javax.persistence.EntityNotFoundException;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final NewsCategoryRepository newsCategoryRepository;
+    private final UserInterestRepository userInterestRepository;
 
-//    @Value("${upload.path}")
-//    private String uploadPath;
 
     @Transactional
     public ResponseEntity<Object> joinUser(SignupRequestDto signupRequestDto){
@@ -96,6 +99,32 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return new UserDetailResponseDto(user);
+    }
+
+    public Boolean updateUserInterest(String category, Long userId){
+        String[] result = category.split(",");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        for (String item: result){
+            System.out.println("item = " + item);
+            NewsCategory newsCategory = newsCategoryRepository.findByName(item)
+                    .orElseThrow(() -> new EntityNotFoundException("NewsCategory not found"));
+            UserInterest userInterest = UserInterest.builder()
+                                                    .newsCategory(newsCategory)
+                                                    .user(user)
+                                                    .build();
+            userInterestRepository.save(userInterest);
+        }
+        return true;
+    }
+
+    public Boolean updateUserPoint(int point, Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setPoint(point);
+        userRepository.save(user);
+        return true;
     }
 
 }

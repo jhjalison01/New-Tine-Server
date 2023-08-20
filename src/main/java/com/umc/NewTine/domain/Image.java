@@ -6,22 +6,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-@AllArgsConstructor
-@Builder
+
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class UserInterest {
+@Table(name = "image")
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long id;
 
-    @ManyToOne
+    @Column(nullable = false)
+    private String url;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private NewsCategory newsCategory;
+    public void updateUrl(String url) {
+        this.url = url;
+    }
 }

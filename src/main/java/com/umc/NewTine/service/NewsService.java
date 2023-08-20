@@ -173,6 +173,14 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public NewTechInfoResponse getNewTechInfo(Long userId) throws BaseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new BaseException(NO_USER_ID));
+
+        return new NewTechInfoResponse(userNewsHistoryRepository.countTodayNewsViews(user), userNewsHistoryRepository.timeSpentByUserToday(user));
+    }
+
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
     public boolean saveRecentViewTime(NewsRecentRequest request) throws BaseException {
 
@@ -180,7 +188,9 @@ public class NewsService {
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
         News news = newsRepository.findById(request.getNewsId())
                 .orElseThrow(() -> new BaseException(NO_NEWS_YET));
-        LocalDateTime recentViewTime = LocalDateTime.now();
+        LocalDateTime recentViewTime = request.getRecentViewTime();
+        LocalDateTime recentViewExitTime = request.getRecentViewExitTime();
+
         boolean isDuplicate = userNewsHistoryRepository.existsByUserAndNewsAndRecentViewTimeBetween(user, news, recentViewTime.minusMinutes(1), recentViewTime);
 
         if (!isDuplicate) {
@@ -188,11 +198,10 @@ public class NewsService {
         }
 
         UserNewsHistory userNewsHistory = userNewsHistoryRepository.findByUserAndNews(user, news)
-                .orElseGet(() -> new UserNewsHistory(user, news, recentViewTime));
+                .orElseGet(() -> new UserNewsHistory(user, news, recentViewTime,recentViewExitTime));
         userNewsHistory.setRecentViewTime(recentViewTime);
         userNewsHistoryRepository.save(userNewsHistory);
 
         return true;
     }
-
 }
