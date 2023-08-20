@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Entity
-@Table(name = "mission_Record")
+@Table(name = "mission_record")
 public class MissionRecord extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
