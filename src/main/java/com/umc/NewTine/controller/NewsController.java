@@ -78,7 +78,7 @@ public class NewsController {
     }
 
 
-    @GetMapping("/search") //검색어를 포함하는 뉴스 기사 조회
+    @GetMapping("/news/search") //검색어를 포함하는 뉴스 기사 조회
     public BaseResponse<List<NewsSearchByWordResponse>> searchNewsByWord(@RequestParam String word) {
         try {
             return new BaseResponse<>(newsService.searchNewsByWord(word));
