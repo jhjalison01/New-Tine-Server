@@ -29,7 +29,7 @@ public class UserDetailResponseDto {
         this.email = user.getEmail();
         this.name = user.getName();
         this.point = user.getPoint();
-        this.imageUrl = user.getImage().getUrl();
+        this.imageUrl = user.getImageUrl();
         this.userInterests = user.getUserInterests().stream().map(h -> new UserInterestResponseDto(h)).collect(Collectors.toList());
     }
 }
