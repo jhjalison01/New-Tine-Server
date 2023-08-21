@@ -22,6 +22,6 @@ public class CommentResponseDto {
         this.content = comment.getContent();
         this.likes = comment.getLikes();
         this.nickname = comment.getUser().getNickname();
-        this.imageUrl = comment.getUser().getImage().getUrl();
+        this.imageUrl = comment.getUser().getImageUrl();
     }
 }

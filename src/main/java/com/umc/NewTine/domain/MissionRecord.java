@@ -6,27 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
 @Entity
-@Table(name = "image")
-public class Image {
-
+@Table(name = "mission_record")
+public class MissionRecord extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String url;
+    @Column(name="mission_id")
+    private int missionId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    public void updateUrl(String url) {
-        this.url = url;
-    }
 }

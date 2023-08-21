@@ -37,9 +37,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column
     private String email;
 
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Image image;
+    @Column
+    private String imageUrl;
 
     @Column
     private int point;
@@ -66,7 +65,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     private List<UserInterest> userInterests = new ArrayList<>();
 
     @Builder
-    public User(String nickname, String email, String name, String password, String provider, String providerId) {
+    public User(String nickname, String email, String name, String password, String provider, String providerId, String imageUrl) {
         this.nickname = nickname;
         this.email = email;
         this.name = name;
@@ -75,6 +74,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.provider = provider;
         this.providerId = providerId;
         this.point = 0;
+        this.imageUrl = imageUrl;
     }
 
 
@@ -131,6 +131,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.nickname = userUpdateRequestDto.getNickname();
         this.name = userUpdateRequestDto.getName();
         this.point = this.point + userUpdateRequestDto.getPoint();
+    }
+
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {

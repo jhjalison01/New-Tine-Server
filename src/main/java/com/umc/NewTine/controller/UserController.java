@@ -2,14 +2,12 @@ package com.umc.NewTine.controller;
 
 import com.umc.NewTine.config.JwtTokenProvider;
 import com.umc.NewTine.domain.User;
-import com.umc.NewTine.domain.UserPrincipal;
 import com.umc.NewTine.dto.request.ImageRequestDto;
 import com.umc.NewTine.dto.request.LoginRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import com.umc.NewTine.dto.response.*;
 import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.repository.UserRepository;
-import com.umc.NewTine.service.ImageService;
 import com.umc.NewTine.service.MailService;
 import com.umc.NewTine.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +17,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
-    private final ImageService imageService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -93,8 +92,8 @@ public class UserController {
     }
 
     @PostMapping("/image")
-    public Long upload(@ModelAttribute ImageRequestDto imageRequestDto, @AuthenticationPrincipal User user) {
-        imageService.upload(imageRequestDto, user.getEmail());
+    public Long upload(@ModelAttribute ImageRequestDto imageRequestDto, @AuthenticationPrincipal User user) throws IOException {
+        userService.uploadImage(imageRequestDto, user.getId());
 
         return user.getId();
     }
