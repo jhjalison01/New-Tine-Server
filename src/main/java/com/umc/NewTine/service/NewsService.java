@@ -98,8 +98,9 @@ public class NewsService {
         Long categoryId = newsCategory.get().getId();
         List<News> news = newsAndCategoryRepository.findNewsByCategoryId(categoryId)
                 .orElse(List.of());
+
         return news.stream()
-                .map(NewsByCategoryResponse::new)
+                .map(data -> new NewsByCategoryResponse(data.getTitle(),data.getPress().getName(),data.getImage()))
                 .collect(Collectors.toList());
 
 
