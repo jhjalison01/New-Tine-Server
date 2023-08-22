@@ -1,32 +1,33 @@
 package com.umc.NewTine.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Getter
 @Entity
+@Table(name = "mission_record")
 public class MissionRecord extends BaseTimeEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = null;
 
-    @JoinColumn(name="user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name="mission_id")
+    private int missionId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
-    private int mission_id;
-
-    public MissionRecord(User user, int mission_id) {
+    public MissionRecord(User user, int missionId) {
         this.user = user;
-        this.mission_id = mission_id;
+        this.missionId = missionId;
     }
-
-    //    @JoinColumn(name="mission_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Mission mission;
-
 }

@@ -1,8 +1,10 @@
 package com.umc.NewTine.service;
 
+import com.umc.NewTine.config.S3Uploader;
 import com.umc.NewTine.domain.NewsCategory;
 import com.umc.NewTine.domain.User;
 import com.umc.NewTine.domain.UserInterest;
+import com.umc.NewTine.dto.request.ImageRequestDto;
 import com.umc.NewTine.dto.request.SignupRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
 import com.umc.NewTine.dto.response.UserDetailResponseDto;
@@ -11,7 +13,7 @@ import com.umc.NewTine.repository.NewsCategoryRepository;
 import com.umc.NewTine.repository.UserInterestRepository;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,9 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final NewsCategoryRepository newsCategoryRepository;
     private final UserInterestRepository userInterestRepository;
+
+    @Autowired
+    private S3Uploader s3Uploader;
 
 
     @Transactional
@@ -119,6 +124,18 @@ public class UserService implements UserDetailsService {
             userInterestRepository.save(userInterest);
         }
         return true;
+    }
+
+    public void uploadImage(ImageRequestDto imageRequestDto, Long userId) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if(!imageRequestDto.getFile().isEmpty()) {
+            String storedFileName = s3Uploader.upload(imageRequestDto.getFile(),"images");
+            user.setImageUrl(storedFileName);
+        }
+
+        User updateduser = userRepository.save(user);
     }
 
 }

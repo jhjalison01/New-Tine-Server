@@ -38,10 +38,14 @@ public class NewsController {
 
     //개별 뉴스기사
     @GetMapping("news/{newsId}")
-    public BaseResponse<SingleNewsResponseDto> getSingleNews(@PathVariable("newsId") Long newsId) {
-        //userId 수정하기
-        Long userId = 1L;
+    public BaseResponse<SingleNewsResponseDto> getSingleNews(@AuthenticationPrincipal User user, @PathVariable("newsId") Long newsId) {
         try {
+            //userId 기본값(사용자가 로그인을 하지 않은 경우) - null
+            Long userId = null;
+            //사용자가 로그인을 한 경우 - user에서 userId 가져오기
+            if (user!=null) {
+                userId = user.getId();
+            }
             return new BaseResponse<>(newsService.getSingleNewsById(userId, newsId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -99,10 +103,9 @@ public class NewsController {
 
     //스크랩한 뉴스 조회
     @GetMapping("/news/scrap")
-    public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews() {
-        //userId 수정하기
-        Long userId = 1L;
+    public BaseResponse<List<ScrapNewsResponseDto>> getScrappedNews(@AuthenticationPrincipal User user) {
         try {
+            Long userId=user.getId();
             return new BaseResponse<>(newsService.getScrappedNews(userId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -112,10 +115,9 @@ public class NewsController {
 
     //뉴스 스크랩하기
     @PostMapping("/news/scrap/{newsId}")
-    public BaseResponse<Void> scrapNews(@PathVariable("newsId") Long newsId) {
-        //userId 수정하기
-        Long userId = 1L;
+    public BaseResponse<Void> scrapNews(@AuthenticationPrincipal User user,@PathVariable("newsId") Long newsId) {
         try {
+            Long userId=user.getId();
             if (newsService.saveNewsScrap(userId, newsId)) {
                 return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
             } else {
@@ -128,9 +130,9 @@ public class NewsController {
 
     //뉴스기사 스크랩 취소하기
     @DeleteMapping("/news/scrap/{newsId}")
-    public BaseResponse<Void> cancelScrapNews(@PathVariable("newsId") Long newsId) {
-        Long userId = 1L; // 사용자 ID 수정하기
+    public BaseResponse<Void> cancelScrapNews(@AuthenticationPrincipal User user,@PathVariable("newsId") Long newsId) {
         try {
+            Long userId=user.getId();
             if (newsService.deleteNewsScrap(userId, newsId)) {
                 return new BaseResponse<>(true, HttpStatus.OK.value(), "Success");
             } else {

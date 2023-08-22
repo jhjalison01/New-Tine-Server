@@ -24,7 +24,7 @@ public class CommentResponseDto {
         this.content = comment.getContent();
         this.likes = comment.getLikes();
         this.nickname = comment.getUser().getNickname();
-        this.imageUrl = comment.getUser().getImage().getUrl();
+        this.imageUrl = comment.getUser().getImageUrl();
     }
     public CommentResponseDto(Comment comment, List<String> successMission){
         this.createdAt = comment.getCreatedAt();
@@ -32,7 +32,7 @@ public class CommentResponseDto {
         this.content = comment.getContent();
         this.likes = comment.getLikes();
         this.nickname = comment.getUser().getNickname();
-        this.imageUrl = comment.getUser().getImage().getUrl();
+        this.imageUrl = comment.getUser().getImageUrl();
         this.successMission = successMission;
     }
 

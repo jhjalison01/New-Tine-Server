@@ -7,3 +7,10 @@ spring:
       generate-ddl: true
   profiles:
     include: db,oauth
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

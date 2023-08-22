@@ -1,8 +1,6 @@
 package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.User;
-import com.umc.NewTine.domain.UserNewsHistory;
-import com.umc.NewTine.dto.request.NewtechHabitRequest;
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.NewTechHabitResponse;
 import com.umc.NewTine.dto.response.NewTechInfoResponse;
@@ -10,21 +8,20 @@ import com.umc.NewTine.repository.MissionRecordRepository;
 import com.umc.NewTine.repository.UserNewsHistoryRepository;
 import com.umc.NewTine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NewtechService {
-
     private final UserNewsHistoryRepository userNewsHistoryRepository;
     private final UserRepository userRepository;
     private final MissionRecordRepository missionRecordRepository;
@@ -53,4 +50,18 @@ public class NewtechService {
         return new NewTechHabitResponse( missionRecordRepository.findSuccessDailyMissionByUserAndDate(user, year, month, day), dayOfResult);
 
     }
+
+    @Transactional(readOnly = true)
+    public List<Integer> getAchieveCalendar(Long userId, int year, int month) throws BaseException {
+        List<Integer> response = new ArrayList<>();
+
+        for (int i = 1; i <= 31; i++) {
+            int num= missionRecordRepository.countMissionByUserIdAndDate(userId,year,month,i);
+            if (num>=3){
+                response.add(i);
+            }
+        }
+        return response;
+    }
+
 }

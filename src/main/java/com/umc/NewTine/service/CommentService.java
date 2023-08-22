@@ -54,8 +54,9 @@ public class CommentService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        System.out.println("commentRequest = " + commentRequest.getContent());
 
-        Comment comment = commentRequest.toEntity(news, user);
+        Comment comment = commentRequest.toEntity(news, user, commentRequest);
         Comment savedComment = commentRepository.save(comment);
 
         if (!missionRecordRepository.existsByUserAndMissionId(user, 3)) {
