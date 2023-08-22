@@ -20,10 +20,11 @@ public class SingleNewsResponseDto {
     private boolean subscribed;
     private boolean scrapped;
     private List<String> category;
-
+    private List<String> successMission;
 
     public SingleNewsResponseDto(String title, String content, String createdAt, String pressName,
-                                 String pressImage, int pressSubscriber, boolean subscribed, boolean scrapped, List<String> category) {
+                                 String pressImage, int pressSubscriber, boolean subscribed, boolean scrapped, List<String> category,
+                                 List<String> successMission) {
         this.title=title;
         this.content=content;
         this.createdAt=createdAt;
@@ -33,5 +34,6 @@ public class SingleNewsResponseDto {
         this.subscribed=subscribed;
         this.scrapped=scrapped;
         this.category=category;
+        this.successMission = successMission;
     }
 }
