@@ -7,3 +7,22 @@ spring:
       generate-ddl: true
   profiles:
     include: db,oauth
+file:
+  path: C:/Users/zjaxj/Desktop/NEW-TINE/New-Tine-Server/src/main/resources/static/image/
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIATMOB33TIF2OCZBF4
+      secretKey: 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
+    s3:
+      bucket: newtine-image
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
