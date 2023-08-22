@@ -12,4 +12,16 @@ public class NewsByCategoryResponse {
         this.pressName = pressName;
         this.imgUrl = imgUrl;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPressName() {
+        return pressName;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
 }

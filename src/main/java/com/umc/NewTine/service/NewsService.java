@@ -92,10 +92,13 @@ public class NewsService {
                 .build();
     }
 
+    //카테고리별 뉴스 기사 조회
     @Transactional
     public List<NewsByCategoryResponse> getNewsByCategory(String category) throws BaseException {
-        Optional<NewsCategory> newsCategory = newsCategoryRepository.findByName(category);
-        Long categoryId = newsCategory.get().getId();
+        NewsCategory newsCategory = newsCategoryRepository.findByName(category)
+                .orElseThrow(() -> new BaseException(NO_USER_ID));
+
+        Long categoryId = newsCategory.getId();
         List<News> news = newsAndCategoryRepository.findNewsByCategoryId(categoryId)
                 .orElse(List.of());
 
