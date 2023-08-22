@@ -52,6 +52,16 @@ public class NewsController {
         }
     }
 
+    //카테고리별 뉴스 기사 조회
+    @GetMapping("/news/category/{category}")
+    public BaseResponse<List<NewsByCategoryResponse>> getNewsByCategory(@PathVariable String category) {
+        try {
+            return new BaseResponse<>(newsService.getNewsByCategory(category));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @GetMapping("/news/recent") //최근 본 뉴스 조회
     public BaseResponse<List<NewsRecentResponse>> getRecentNews(@AuthenticationPrincipal User user) {
 
