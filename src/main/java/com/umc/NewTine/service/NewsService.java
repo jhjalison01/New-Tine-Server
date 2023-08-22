@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Collections;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -89,6 +90,19 @@ public class NewsService {
                 .category(category)
                 .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
                 .build();
+    }
+
+    @Transactional
+    public List<NewsByCategoryResponse> getNewsByCategory(String category) throws BaseException {
+        Optional<NewsCategory> newsCategory = newsCategoryRepository.findByName(category);
+        Long categoryId = newsCategory.get().getId();
+        List<News> news = newsAndCategoryRepository.findNewsByCategoryId(categoryId)
+                .orElse(List.of());
+        return news.stream()
+                .map(NewsByCategoryResponse::new)
+                .collect(Collectors.toList());
+
+
     }
 
     //스크랩한 기사 가져오기
