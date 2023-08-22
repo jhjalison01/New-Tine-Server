@@ -21,10 +21,10 @@ public class NewtechController {
 
     private final NewtechService newtechService;
 
-    @GetMapping("/{userId}") //뉴테크 페이지 조회
-    public BaseResponse<NewTechInfoResponse> getNewTechInfo(@PathVariable Long userId) {
+    @GetMapping("") //뉴테크 페이지 조회
+    public BaseResponse<NewTechInfoResponse> getNewTechInfo(@AuthenticationPrincipal User user) {
         try {
-            return new BaseResponse<>(newtechService.getNewTechInfo(userId));
+            return new BaseResponse<>(newtechService.getNewTechInfo(user.getId()));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

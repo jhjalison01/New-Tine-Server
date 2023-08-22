@@ -52,11 +52,11 @@ public class NewsController {
         }
     }
 
-    @GetMapping("/news/{userId}/recent") //최근 본 뉴스 조회
-    public BaseResponse<List<NewsRecentResponse>> getRecentNews(@PathVariable Long userId) {
+    @GetMapping("/news/recent") //최근 본 뉴스 조회
+    public BaseResponse<List<NewsRecentResponse>> getRecentNews(@AuthenticationPrincipal User user) {
 
         try {
-            return new BaseResponse<>(newsService.getRecentNews(userId));
+            return new BaseResponse<>(newsService.getRecentNews(user.getId()));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -82,10 +82,10 @@ public class NewsController {
         }
     }
 
-    @GetMapping("/news/{userId}/recommend") //추천 뉴스 조회
-    public BaseResponse<List<NewsRecommendResponse>> getRecommendNews(@PathVariable Long userId) {
+    @GetMapping("/news/recommend") //추천 뉴스 조회
+    public BaseResponse<List<NewsRecommendResponse>> getRecommendNews(@AuthenticationPrincipal User user) {
         try {
-            return new BaseResponse<>(newsService.getRecommendNews(userId));
+            return new BaseResponse<>(newsService.getRecommendNews(user.getId()));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
