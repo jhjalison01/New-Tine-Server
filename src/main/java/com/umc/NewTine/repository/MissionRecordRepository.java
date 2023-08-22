@@ -16,5 +16,11 @@ public interface MissionRecordRepository extends JpaRepository<MissionRecord, Lo
     @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM MissionRecord r WHERE r.user = :user AND r.mission_id = :missionId AND DATE(r.createdAt) = CURRENT_DATE")
     boolean existsByUserAndMissionId(@Param("user") User user, @Param("missionId") int missionId);
 
+    @Query("SELECT DISTINCT m.name FROM MissionRecord r INNER JOIN Mission m ON r.mission_id = m.id WHERE r.user = :user AND YEAR(r.createdAt)=:year AND MONTH(r.createdAt)=:month AND DAY(r.createdAt)=:day")
+    List<String> findSuccessDailyMissionByUserAndDate(@Param("user") User user, @Param("year") int year, @Param("month") int month, @Param("day") int day);
+
+    @Query("SELECT COUNT(m) FROM MissionRecord m WHERE m.user.id=:userId AND YEAR(m.createdAt) = :year AND MONTH(m.createdAt) = :month AND DAY(m.createdAt) = :day")
+    int countMissionByUserIdAndDate(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month,@Param("day") int day);
+
 }
 

@@ -7,5 +7,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NewtechHabitRequest {
     private LocalDateTime dateTime;
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 }
 
