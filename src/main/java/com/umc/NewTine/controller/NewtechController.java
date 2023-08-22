@@ -43,7 +43,10 @@ public class NewtechController {
     }
 
     @GetMapping("/habit")
-    public BaseResponse<NewTechHabitResponse> getNewTechHabit(@AuthenticationPrincipal User user, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
+    public BaseResponse<NewTechHabitResponse> getNewTechHabit(@AuthenticationPrincipal User user,
+                                                              @RequestParam("year") int year,
+                                                              @RequestParam ("month") int month,
+                                                              @RequestParam("day") int day) {
         try {
             return new BaseResponse<>(newtechService.getNewTechHabit(user, year, month, day));
         } catch (BaseException e) {
