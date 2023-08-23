@@ -2,6 +2,7 @@ package com.umc.NewTine.controller;
 
 import com.umc.NewTine.config.JwtTokenProvider;
 import com.umc.NewTine.domain.User;
+import com.umc.NewTine.domain.UserPrincipal;
 import com.umc.NewTine.dto.request.ImageRequestDto;
 import com.umc.NewTine.dto.request.LoginRequestDto;
 import com.umc.NewTine.dto.request.UserUpdateRequestDto;
