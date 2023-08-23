@@ -12,12 +12,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SignupRequestDto {
     private String email;
     private String password;
+    private String nickname;
+    private String name;
 
 
     @Builder
     public SignupRequestDto(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
+        this.nickname = user.getNickname();
+        this.name = user.getName();
     }
 
     public void encryptPassword(PasswordEncoder passwordEncoder) {
@@ -32,6 +36,8 @@ public class SignupRequestDto {
         return User.builder()
                 .email(signupRequestDto.getEmail())
                 .password(signupRequestDto.getPassword())
+                .nickname(signupRequestDto.getNickname())
+                .name(signupRequestDto.getName())
                 .build();
     }
 }
