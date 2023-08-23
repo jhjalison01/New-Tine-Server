@@ -104,22 +104,20 @@ public class NewsService {
 
         return news.stream()
                 .map(data -> NewsByCategoryResponse.builder()
-                                .title(data.getTitle())
-                                .content(data.getContent())
-                                .pressName(data.getPress().getName())
-                                .pressImage(data.getPress().getImage())
-                                .pressSubscriber(data.getPress().getSubscriber())
-                                .subscribed(pressSubscriptionRepository.existsByPressIdAndUserId(data.getPress().getId(), user.getId()   ))
-                                .scrapped(newsScrapRepository.existsByNewsIdAndUserId(data.getId(), user.getId()))
-                                .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
-                                .build())
+                        .title(data.getTitle())
+                        .content(data.getContent())
+                        .pressName(data.getPress().getName())
+                        .pressImage(data.getPress().getImage())
+                        .pressSubscriber(data.getPress().getSubscriber())
+                        .subscribed(pressSubscriptionRepository.existsByPressIdAndUserId(data.getPress().getId(), user.getId()))
+                        .scrapped(newsScrapRepository.existsByNewsIdAndUserId(data.getId(), user.getId()))
+                        .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
+                        .imgUrl(data.getImage())
+                        .category(newsAndCategoryRepository.findByNewsId(data.getId()).stream()
+                                .map(a -> newsCategoryRepository.getById(a.getNewsCategory().getId()).getName())
+                                .collect(Collectors.toList()))
+                        .build())
                 .collect(Collectors.toList());
-
-
-//    (
-//                        data.getTitle(),data.getPress().getName(),data.getImage()))
-//                .collect(Collectors.toList());
-
 
     }
 

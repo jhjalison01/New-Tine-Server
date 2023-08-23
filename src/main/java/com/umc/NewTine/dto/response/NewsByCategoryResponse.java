@@ -1,13 +1,15 @@
 package com.umc.NewTine.dto.response;
 
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
+
+@Data
 @Builder
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewsByCategoryResponse {
 
     private String title;
@@ -39,47 +41,4 @@ public class NewsByCategoryResponse {
         this.imgUrl = imgUrl;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getPressName() {
-        return pressName;
-    }
-
-    public String getPressImage() {
-        return pressImage;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public int getPressSubscriber() {
-        return pressSubscriber;
-    }
-
-    public boolean isSubscribed() {
-        return subscribed;
-    }
-
-    public boolean isScrapped() {
-        return scrapped;
-    }
-
-    public List<String> getCategory() {
-        return category;
-    }
-
-    public List<String> getSuccessMission() {
-        return successMission;
-    }
 }
