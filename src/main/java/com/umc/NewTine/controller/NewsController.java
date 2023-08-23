@@ -54,9 +54,9 @@ public class NewsController {
 
     //카테고리별 뉴스 기사 조회
     @GetMapping("/news/category/{category}")
-    public BaseResponse<List<NewsByCategoryResponse>> getNewsByCategory(@PathVariable String category) {
+    public BaseResponse<List<NewsByCategoryResponse>> getNewsByCategory(@AuthenticationPrincipal User user, @PathVariable String category) {
         try {
-            return new BaseResponse<>(newsService.getNewsByCategory(category));
+            return new BaseResponse<>(newsService.getNewsByCategory(user, category));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

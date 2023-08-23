@@ -94,7 +94,7 @@ public class NewsService {
 
     //카테고리별 뉴스 기사 조회
     @Transactional
-    public List<NewsByCategoryResponse> getNewsByCategory(String category) throws BaseException {
+    public List<NewsByCategoryResponse> getNewsByCategory(User user, String category) throws BaseException {
         NewsCategory newsCategory = newsCategoryRepository.findByName(category)
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
 
@@ -103,8 +103,22 @@ public class NewsService {
                 .orElse(List.of());
 
         return news.stream()
-                .map(data -> new NewsByCategoryResponse(data.getTitle(),data.getPress().getName(),data.getImage()))
+                .map(data -> NewsByCategoryResponse.builder()
+                                .title(data.getTitle())
+                                .content(data.getContent())
+                                .pressName(data.getPress().getName())
+                                .pressImage(data.getPress().getImage())
+                                .pressSubscriber(data.getPress().getSubscriber())
+                                .subscribed(pressSubscriptionRepository.existsByPressIdAndUserId(data.getPress().getId(), user.getId()   ))
+                                .scrapped(newsScrapRepository.existsByNewsIdAndUserId(data.getId(), user.getId()))
+                                .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
+                                .build())
                 .collect(Collectors.toList());
+
+
+//    (
+//                        data.getTitle(),data.getPress().getName(),data.getImage()))
+//                .collect(Collectors.toList());
 
 
     }

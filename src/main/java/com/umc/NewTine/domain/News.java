@@ -78,6 +78,9 @@ public class News {
         return views;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
     public void setViews(int views) {
         this.views = views;
