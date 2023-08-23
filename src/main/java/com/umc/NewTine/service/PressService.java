@@ -43,6 +43,26 @@ public class PressService {
 
         return true;
     }
+    //pressSubscriptions 저장
+    @Transactional
+    public boolean savePressSubscriptions(Long userId,String presses) throws BaseException {
+        String[] result = presses.split(",");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        for (String item: result){
+            System.out.println("item = " + item);
+            Press press = pressRepository.findByName(item)
+                    .orElseThrow(() -> new EntityNotFoundException("Press not found"));
+            PressSubscription pressSubscription = PressSubscription.builder()
+                    .press(press)
+                    .user(user)
+                    .build();
+            pressSubscriptionRepository.save(pressSubscription);
+        }
+        return true;
+    }
+
 
     //pressSubscription 삭제
     @Transactional
