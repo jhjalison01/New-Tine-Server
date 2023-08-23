@@ -17,11 +17,11 @@ public class NewsAndCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = null;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
     private NewsCategory newsCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="news_id")
     private News news;
 }
