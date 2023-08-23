@@ -220,9 +220,9 @@ public class NewsService {
 
 
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
-    public List<String> saveRecentViewTime(NewsRecentRequest request) throws BaseException {
+    public List<String> saveRecentViewTime(Long userId, NewsRecentRequest request) throws BaseException {
 
-        User user = userRepository.findById(request.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
         News news = newsRepository.findById(request.getNewsId())
                 .orElseThrow(() -> new BaseException(NO_NEWS_YET));
