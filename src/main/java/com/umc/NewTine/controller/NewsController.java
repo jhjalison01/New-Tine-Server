@@ -54,9 +54,9 @@ public class NewsController {
 
     //카테고리별 뉴스 기사 조회
     @GetMapping("/news/category/{category}")
-    public BaseResponse<List<NewsByCategoryResponse>> getNewsByCategory(@PathVariable String category) {
+    public BaseResponse<List<NewsByCategoryResponse>> getNewsByCategory(@AuthenticationPrincipal User user, @PathVariable String category) {
         try {
-            return new BaseResponse<>(newsService.getNewsByCategory(category));
+            return new BaseResponse<>(newsService.getNewsByCategory(user, category));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -103,9 +103,9 @@ public class NewsController {
 
 
     @PostMapping("/news") //사용자-뉴스 기록 저장, viewCount 증가
-    public BaseResponse<List<String>> saveRecentViewTime(@RequestBody NewsRecentRequest request) {
+    public BaseResponse<List<String>> saveRecentViewTime(@AuthenticationPrincipal User user, @RequestBody NewsRecentRequest request) {
         try {
-            return new BaseResponse<>(newsService.saveRecentViewTime(request));
+            return new BaseResponse<>(newsService.saveRecentViewTime(user.getId(),request));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

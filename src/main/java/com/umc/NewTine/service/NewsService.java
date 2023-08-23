@@ -65,6 +65,7 @@ public class NewsService {
             scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
             subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
         }
+//        newsAndCategoryRepository.findCategoryIdByNewsId(newsId)
 
         List<NewsAndCategory> newsAndCategoryList = newsAndCategoryRepository.findByNewsId(newsId);
         List<String> category = newsAndCategoryList.stream()
@@ -88,13 +89,15 @@ public class NewsService {
                 .subscribed(subscribed)
                 .scrapped(scrapped)
                 .category(category)
+                .newsImg(news.getImage())
                 .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
+                .newsId(news.getId())
                 .build();
     }
 
     //카테고리별 뉴스 기사 조회
     @Transactional
-    public List<NewsByCategoryResponse> getNewsByCategory(String category) throws BaseException {
+    public List<NewsByCategoryResponse> getNewsByCategory(User user, String category) throws BaseException {
         NewsCategory newsCategory = newsCategoryRepository.findByName(category)
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
 
@@ -103,9 +106,8 @@ public class NewsService {
                 .orElse(List.of());
 
         return news.stream()
-                .map(data -> new NewsByCategoryResponse(data.getTitle(),data.getPress().getName(),data.getImage()))
+                .map(data -> new NewsByCategoryResponse(data.getTitle(),data.getPress().getName(), data.getImage(),data.getContent(), data.getId(),data.getPress().getImage()))
                 .collect(Collectors.toList());
-
 
     }
 
@@ -208,9 +210,9 @@ public class NewsService {
 
 
     @Transactional //사용자-뉴스 기록 저장, viewCount 증가
-    public List<String> saveRecentViewTime(NewsRecentRequest request) throws BaseException {
+    public List<String> saveRecentViewTime(Long userId, NewsRecentRequest request) throws BaseException {
 
-        User user = userRepository.findById(request.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
         News news = newsRepository.findById(request.getNewsId())
                 .orElseThrow(() -> new BaseException(NO_NEWS_YET));

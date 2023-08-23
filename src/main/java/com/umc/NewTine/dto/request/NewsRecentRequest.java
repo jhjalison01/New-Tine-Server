@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 public class NewsRecentRequest {
 
-    private Long userId;
-
     private Long newsId;
 
     private LocalDateTime recentViewTime;
@@ -14,9 +12,6 @@ public class NewsRecentRequest {
 
     public Long getNewsId() {
         return newsId;
-    }
-    public Long getUserId() {
-        return userId;
     }
 
     public LocalDateTime getRecentViewTime() {
