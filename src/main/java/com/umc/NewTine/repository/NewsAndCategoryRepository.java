@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NewsAndCategoryRepository extends JpaRepository<NewsAndCategory,Long> {
-    List<NewsAndCategory> findByNewsId(Long newsId);
+    NewsAndCategory findByNewsId(Long newsId);
 
     @Query("SELECT nc.news FROM NewsAndCategory nc WHERE nc.newsCategory.id = :categoryId")
     Optional<List<News>> findNewsByCategoryId(@Param("categoryId") Long categoryId);

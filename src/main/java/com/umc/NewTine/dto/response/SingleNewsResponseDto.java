@@ -19,13 +19,13 @@ public class SingleNewsResponseDto {
     private int pressSubscriber;
     private boolean subscribed;
     private boolean scrapped;
-    private List<String> category;
+    private String category;
     private List<String> successMission;
     private String newsImg;
     private Long newsId;
 
     public SingleNewsResponseDto(String title, String content, String createdAt, String pressName,
-                                 String pressImage, int pressSubscriber, boolean subscribed, boolean scrapped, List<String> category,
+                                 String pressImage, int pressSubscriber, boolean subscribed, boolean scrapped, String category,
                                  List<String> successMission, String newsImg, Long newsId) {
         this.title=title;
         this.content=content;

@@ -65,16 +65,19 @@ public class NewsService {
             scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
             subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
         }
-//        newsAndCategoryRepository.findCategoryIdByNewsId(newsId)
 
-        List<NewsAndCategory> newsAndCategoryList = newsAndCategoryRepository.findByNewsId(newsId);
-        List<String> category = newsAndCategoryList.stream()
-                .map(data -> newsCategoryRepository.getById(data.getNewsCategory().getId()).getName())
-                .collect(Collectors.toList());
+        NewsAndCategory newsAndCategory = newsAndCategoryRepository.findByNewsId(newsId);
+        String category = newsAndCategory.getNewsCategory().getName();
 
         if (!missionRecordRepository.existsByUserAndMissionId(user, 1)) {
             missionRecordRepository.save(new MissionRecord(user, 1));
             missionRecordRepository.findSuccessDailyMissionByUser(user);
+        }
+
+        String createdAtFormatted = "null";
+        LocalDateTime createdAt = news.getCreatedAt();
+        if (createdAt != null) {
+            createdAtFormatted = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").format(createdAt);
         }
 
 
@@ -82,7 +85,7 @@ public class NewsService {
         return SingleNewsResponseDto.builder()
                 .title(news.getTitle())
                 .content(news.getContent())
-                .createdAt(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm").format(news.getCreatedAt()))
+                .createdAt(createdAtFormatted)
                 .pressName(press.getName())
                 .pressImage(press.getImage())
                 .pressSubscriber(press.getSubscriber())
