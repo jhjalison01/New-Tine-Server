@@ -35,6 +35,22 @@ public class PressController {
         }
     }
 
+
+    //여러 개 언론사 구독하기
+    @PostMapping("/press")
+    public BaseResponse<Void> subscribePresses(@AuthenticationPrincipal User user, @RequestParam("presses") String presses){
+        try{
+            Long userId=user.getId();
+            if (pressService.savePressSubscriptions(userId,presses)){
+                return new BaseResponse<>(true, HttpStatus.OK.value(),"Success");
+            } else{
+                return new BaseResponse<>(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"Fail");
+            }
+        } catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     //언론사 구독 취소하기
     @DeleteMapping("/press/{pressId}")
     public BaseResponse<Void> cancelSubscribePress(@AuthenticationPrincipal User user,@PathVariable("pressId") Long pressId){
