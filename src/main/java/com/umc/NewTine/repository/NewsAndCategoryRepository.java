@@ -19,4 +19,5 @@ public interface NewsAndCategoryRepository extends JpaRepository<NewsAndCategory
 
     @Query("SELECT DISTINCT n.news FROM NewsAndCategory n JOIN UserInterest u ON n.newsCategory.id = u.newsCategory.id WHERE u.user.id = :userId")
     Optional<List<News>> findNewsByUserInterest(@Param("userId") Long userId);
+
 }

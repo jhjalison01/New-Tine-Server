@@ -1,44 +1,49 @@
 package com.umc.NewTine.dto.response;
 
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
-
-@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class NewsByCategoryResponse {
 
     private String title;
-    private String content;
-    private String createdAt;
     private String pressName;
-    private String pressImage;
     private String imgUrl;
-    private int pressSubscriber;
-    private boolean subscribed;
-    private boolean scrapped;
-    private List<String> category;
-    private List<String> successMission;
+    private String content;
+    private Long newsId;
+    private String pressImg;
 
 
-    public NewsByCategoryResponse(String title, String content, String createdAt, String pressName,
-                String pressImage, int pressSubscriber, boolean subscribed, boolean scrapped, List<String> category,
-                List<String> successMission, String imgUrl) {
-        this.title=title;
-        this.content=content;
-        this.createdAt=createdAt;
-        this.pressName=pressName;
-        this.pressImage=pressImage;
-        this.pressSubscriber=pressSubscriber;
-        this.subscribed=subscribed;
-        this.scrapped=scrapped;
-        this.category=category;
-        this.successMission = successMission;
+    public NewsByCategoryResponse(String title, String pressName, String imgUrl, String content, Long newsId, String pressImg) {
+        this.title = title;
+        this.pressName = pressName;
         this.imgUrl = imgUrl;
+        this.content = content;
+        this.newsId = newsId;
+        this.pressImg = pressImg;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPressName() {
+        return pressName;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Long getNewsId() {
+        return newsId;
+    }
 }

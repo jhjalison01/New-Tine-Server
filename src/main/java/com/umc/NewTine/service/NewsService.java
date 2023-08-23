@@ -65,6 +65,7 @@ public class NewsService {
             scrapped = newsScrapRepository.existsByNewsIdAndUserId(newsId, userId);
             subscribed = pressSubscriptionRepository.existsByPressIdAndUserId(press.getId(), userId);
         }
+//        newsAndCategoryRepository.findCategoryIdByNewsId(newsId)
 
         List<NewsAndCategory> newsAndCategoryList = newsAndCategoryRepository.findByNewsId(newsId);
         List<String> category = newsAndCategoryList.stream()
@@ -88,7 +89,9 @@ public class NewsService {
                 .subscribed(subscribed)
                 .scrapped(scrapped)
                 .category(category)
+                .newsImg(news.getImage())
                 .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
+                .newsId(news.getId())
                 .build();
     }
 
@@ -103,20 +106,7 @@ public class NewsService {
                 .orElse(List.of());
 
         return news.stream()
-                .map(data -> NewsByCategoryResponse.builder()
-                        .title(data.getTitle())
-                        .content(data.getContent())
-                        .pressName(data.getPress().getName())
-                        .pressImage(data.getPress().getImage())
-                        .pressSubscriber(data.getPress().getSubscriber())
-                        .subscribed(pressSubscriptionRepository.existsByPressIdAndUserId(data.getPress().getId(), user.getId()))
-                        .scrapped(newsScrapRepository.existsByNewsIdAndUserId(data.getId(), user.getId()))
-                        .successMission(missionRecordRepository.findSuccessDailyMissionByUser(user))
-                        .imgUrl(data.getImage())
-                        .category(newsAndCategoryRepository.findByNewsId(data.getId()).stream()
-                                .map(a -> newsCategoryRepository.getById(a.getNewsCategory().getId()).getName())
-                                .collect(Collectors.toList()))
-                        .build())
+                .map(data -> new NewsByCategoryResponse(data.getTitle(),data.getPress().getName(), data.getImage(),data.getContent(), data.getId(),data.getPress().getImage()))
                 .collect(Collectors.toList());
 
     }
