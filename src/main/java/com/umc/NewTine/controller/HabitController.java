@@ -1,6 +1,8 @@
 package com.umc.NewTine.controller;
 
 import com.umc.NewTine.domain.User;
+import com.umc.NewTine.dto.request.HabitRequest;
+import com.umc.NewTine.dto.request.NewsRecentRequest;
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.BaseResponse;
 import com.umc.NewTine.dto.response.BaseResponseStatus;
@@ -36,7 +38,7 @@ public class HabitController {
     }
 
     @PostMapping("")
-    public BaseResponse<BaseResponseStatus> setHabit(@AuthenticationPrincipal User user, @RequestBody int num) {
+    public BaseResponse<BaseResponseStatus> setHabit(@AuthenticationPrincipal User user, @RequestBody HabitRequest request) {
 
         /**
          * 토큰에서 userId 정보 가져와서 넣어주는 부분 추가 필요
@@ -44,7 +46,7 @@ public class HabitController {
         Long userId = user.getId();
 
         try {
-            habitservice.setHabit(userId, num);
+            habitservice.setHabit(userId, request);
             return new BaseResponse<>(SUCCESS_TO_SET_HABIT);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
