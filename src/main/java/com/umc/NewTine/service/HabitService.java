@@ -31,7 +31,12 @@ public class HabitService {
         Optional<Habit> habit = habitRepository.findByUser(user);
 
         return HabitDto.builder()
-                .nums(habit.get().getNums()).build();
+                .nums(habit.get().getNums())
+                .days(habit.get().getDays())
+                .ampm(habit.get().getAmpm())
+                .hour(habit.get().getHour())
+                .minute(habit.get().getMinute())
+                .build();
     }
 
     @Transactional
