@@ -13,4 +13,12 @@ import lombok.NoArgsConstructor;
 public class HabitDto {
 
     private int nums;
+
+    private String days;
+
+    private String ampm;
+
+    private String hour;
+
+    private String minute;
 }
