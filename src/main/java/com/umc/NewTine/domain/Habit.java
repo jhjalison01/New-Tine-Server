@@ -31,9 +31,13 @@ public class Habit {
 
     private String minute;
 
-    public void updateNums(int nums) {
-        this.nums = nums;
-    }
 
+    public void updateHabitInfo(int nums, String days, String ampm, String hour, String minute) {
+        this.nums = nums;
+        this.days = days;
+        this.ampm = ampm;
+        this.hour = hour;
+        this.minute = minute;
+    }
 
 }
