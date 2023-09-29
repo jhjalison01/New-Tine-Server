@@ -2,6 +2,7 @@ package com.umc.NewTine.service;
 
 import com.umc.NewTine.domain.Habit;
 import com.umc.NewTine.domain.User;
+import com.umc.NewTine.dto.request.HabitRequest;
 import com.umc.NewTine.dto.response.BaseException;
 import com.umc.NewTine.dto.response.HabitDto;
 import com.umc.NewTine.repository.HabitRepository;
@@ -31,18 +32,37 @@ public class HabitService {
         Optional<Habit> habit = habitRepository.findByUser(user);
 
         return HabitDto.builder()
-                .nums(habit.get().getNums()).build();
+                .nums(habit.get().getNums())
+                .days(habit.get().getDays())
+                .hour(habit.get().getHour())
+                .minute(habit.get().getMinute())
+                .build();
     }
 
     @Transactional
-    public void setHabit(Long userId, int num) throws BaseException {
+    public void setHabit(Long userId, HabitRequest request) throws BaseException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
 
-        Habit habit = habitRepository.findByUser(user).get();
-        int prev_nums = habit.getNums();
-        habit.updateNums(num);
-        log.info("습관 업데이트 {} -> {}", prev_nums, num);
+        Optional<Habit> habitOptional = habitRepository.findByUser(user);
+        String getDays = "";
+        for (String day : request.getDays()) {
+            getDays += day + ",";
+        }
+        if (habitOptional.isPresent()) {
+            Habit habit = habitRepository.findByUser(user).get();
+            int prev_nums = habit.getNums();
+            habit.updateHabitInfo(request.getNums(),getDays,request.getHour(),request.getMinute());
+            log.info("습관 업데이트 {} -> {}", prev_nums, request.getNums());
+        } else {
+            habitRepository.save(Habit.builder()
+                    .user(user)
+                    .nums(request.getNums())
+                    .days(getDays)
+                    .hour(request.getHour())
+                    .minute(request.getMinute())
+                    .build());
+        }
     }
 
 }
