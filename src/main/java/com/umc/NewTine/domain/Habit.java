@@ -25,17 +25,14 @@ public class Habit {
 
     private String days;
 
-    private String ampm;
-
     private String hour;
 
     private String minute;
 
 
-    public void updateHabitInfo(int nums, String days, String ampm, String hour, String minute) {
+    public void updateHabitInfo(int nums, String days, String hour, String minute) {
         this.nums = nums;
         this.days = days;
-        this.ampm = ampm;
         this.hour = hour;
         this.minute = minute;
     }

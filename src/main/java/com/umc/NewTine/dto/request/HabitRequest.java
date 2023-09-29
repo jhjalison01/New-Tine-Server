@@ -9,8 +9,6 @@ public class HabitRequest {
 
     private String days;
 
-    private String ampm;
-
     private String hour;
 
     private String minute;

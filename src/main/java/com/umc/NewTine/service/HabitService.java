@@ -36,7 +36,6 @@ public class HabitService {
         return HabitDto.builder()
                 .nums(habit.get().getNums())
                 .days(habit.get().getDays())
-                .ampm(habit.get().getAmpm())
                 .hour(habit.get().getHour())
                 .minute(habit.get().getMinute())
                 .build();
@@ -51,14 +50,13 @@ public class HabitService {
         if (habitOptional.isPresent()) {
             Habit habit = habitRepository.findByUser(user).get();
             int prev_nums = habit.getNums();
-            habit.updateHabitInfo(request.getNums(),request.getDays(),request.getAmpm(),request.getHour(),request.getMinute());
+            habit.updateHabitInfo(request.getNums(),request.getDays(),request.getHour(),request.getMinute());
             log.info("습관 업데이트 {} -> {}", prev_nums, request.getNums());
         } else {
             habitRepository.save(Habit.builder()
                     .user(user)
                     .nums(request.getNums())
                     .days(request.getDays())
-                    .ampm(request.getAmpm())
                     .hour(request.getHour())
                     .minute(request.getMinute())
                     .build());
