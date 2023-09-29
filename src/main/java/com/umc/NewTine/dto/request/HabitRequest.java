@@ -2,12 +2,14 @@ package com.umc.NewTine.dto.request;
 
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class HabitRequest {
 
     private int nums;
 
-    private String days;
+    private List<String> days;
 
     private String hour;
 

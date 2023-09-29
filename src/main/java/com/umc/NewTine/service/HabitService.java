@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.Optional;
 
 import static com.umc.NewTine.dto.response.BaseResponseStatus.NO_USER_ID;
@@ -47,16 +45,20 @@ public class HabitService {
                 .orElseThrow(() -> new BaseException(NO_USER_ID));
 
         Optional<Habit> habitOptional = habitRepository.findByUser(user);
+        String getDays = "";
+        for (String day : request.getDays()) {
+            getDays += day + ",";
+        }
         if (habitOptional.isPresent()) {
             Habit habit = habitRepository.findByUser(user).get();
             int prev_nums = habit.getNums();
-            habit.updateHabitInfo(request.getNums(),request.getDays(),request.getHour(),request.getMinute());
+            habit.updateHabitInfo(request.getNums(),getDays,request.getHour(),request.getMinute());
             log.info("습관 업데이트 {} -> {}", prev_nums, request.getNums());
         } else {
             habitRepository.save(Habit.builder()
                     .user(user)
                     .nums(request.getNums())
-                    .days(request.getDays())
+                    .days(getDays)
                     .hour(request.getHour())
                     .minute(request.getMinute())
                     .build());

@@ -16,8 +16,6 @@ public class HabitDto {
 
     private String days;
 
-    private String ampm;
-
     private String hour;
 
     private String minute;
