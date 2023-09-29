@@ -23,9 +23,18 @@ public class Habit {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void updateNums(int nums) {
-        this.nums = nums;
-    }
+    private String days;
 
+    private String hour;
+
+    private String minute;
+
+
+    public void updateHabitInfo(int nums, String days, String hour, String minute) {
+        this.nums = nums;
+        this.days = days;
+        this.hour = hour;
+        this.minute = minute;
+    }
 
 }
